@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knit Counter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="counter-app">
+    <section class="counter-card" aria-labelledby="app-title">
+        <button id="savedEntriesButton" class="saved-entries-button" type="button" aria-label="保存した段数を見る">
+            <span class="saved-entries-icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        </button>
+        <h1 id="app-title">Knit Counter</h1>
+        <!--<p class="description">＋ボタンで段数を増やし、－ボタンで減らせます。</p> -->
+
+        <div class="count-display" aria-live="polite" aria-atomic="true">
+            <div class="count-surface">
+                <span class="count-label">現 在 の 段 数</span>
+                <span id="count" class="count-value">0</span>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button id="decreaseButton" class="count-button secondary" type="button" aria-label="段数を1つ減らす">−</button>
+            <button id="increaseButton" class="count-button primary" type="button" aria-label="段数を1つ増やす">＋</button>
+        </div>
+
+        <button id="resetButton" class="reset-button" type="button">0に戻す</button>
+        <button id="saveButton" class="save-button" type="button">現在の段数を保存</button>
+    </section>
+</main>
+
+<div id="saveModal" class="modal" hidden>
+    <div id="modalBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="saveModalTitle"
+        aria-describedby="saveModalDescription"
+    >
+        <h2 id="saveModalTitle">段数を保存</h2>
+        <p id="saveModalDescription" class="modal-description">今の段数に名前を付けて保存できます。</p>
+
+        <div class="modal-count-box">
+            <span class="modal-count-label">現在の段数</span>
+            <span id="modalCurrentCount" class="modal-count-value">0</span>
+        </div>
+
+        <label class="modal-label" for="saveNameInput">保存名</label>
+        <input
+            id="saveNameInput"
+            class="modal-input"
+            type="text"
+            maxlength="40"
+            placeholder="例: 身頃 42段目"
+        >
+
+        <p id="saveError" class="modal-error" hidden>名前を入力してください。</p>
+
+        <div class="modal-actions">
+            <button id="cancelSaveButton" class="modal-button secondary" type="button">キャンセル</button>
+            <button id="confirmSaveButton" class="modal-button primary" type="button">保存する</button>
+        </div>
+    </section>
+</div>
+
+<div id="savedEntriesModal" class="modal" hidden>
+    <div id="savedEntriesBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card saved-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="savedEntriesTitle"
+    >
+        <div class="saved-modal-header">
+            <div>
+                <h2 id="savedEntriesTitle">これまでの記録</h2>
+
+            </div>
+            <span id="savedCount" class="saved-count">0件</span>
+        </div>
+
+        <div id="savedList" class="saved-list" aria-live="polite"></div>
+
+        <div class="modal-actions single-action">
+            <button id="closeSavedEntriesButton" class="modal-button secondary" type="button">閉じる</button>
+        </div>
+    </section>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
