@@ -176,6 +176,11 @@ function closeSaveModal() {
     closeModal(saveModal);
 }
 
+function closeSaveModalWithSound() {
+    playSaveClickSound();
+    window.setTimeout(closeSaveModal, 60);
+}
+
 function openSavedEntriesModal() {
     renderSavedCounts();
     openModal(savedEntriesModal, closeSavedEntriesButton);
@@ -411,10 +416,7 @@ savedEntriesButton.addEventListener("click", () => {
     openSavedEntriesModal();
 });
 
-cancelSaveButton.addEventListener("click", () => {
-    playSaveClickSound();
-    closeSaveModal();
-});
+cancelSaveButton.addEventListener("click", closeSaveModalWithSound);
 confirmSaveButton.addEventListener("click", saveCurrentCount);
 modalBackdrop.addEventListener("click", closeSaveModal);
 
