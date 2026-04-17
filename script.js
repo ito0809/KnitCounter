@@ -214,6 +214,7 @@ function loadSavedCount(id) {
         return;
     }
 
+    playSaveClickSound();
     count = item.count;
     renderCount();
     closeSavedEntriesModal();
@@ -226,6 +227,7 @@ function deleteSavedCount(id) {
         return;
     }
 
+    playSaveClickSound();
     savedCounts = nextSavedCounts;
     writeSavedCounts();
     renderSavedCounts();
@@ -352,36 +354,36 @@ function playSaveClickSound() {
 
     const now = context.currentTime;
     const mainOscillator = context.createOscillator();
-    const overtoneOscillator = context.createOscillator();
+    const accentOscillator = context.createOscillator();
     const gainNode = context.createGain();
     const filter = context.createBiquadFilter();
 
-    mainOscillator.type = "triangle";
-    mainOscillator.frequency.setValueAtTime(520, now);
-    mainOscillator.frequency.exponentialRampToValueAtTime(340, now + 0.1);
+    mainOscillator.type = "square";
+    mainOscillator.frequency.setValueAtTime(2100, now);
+    mainOscillator.frequency.exponentialRampToValueAtTime(1100, now + 0.018);
 
-    overtoneOscillator.type = "sine";
-    overtoneOscillator.frequency.setValueAtTime(760, now);
-    overtoneOscillator.frequency.exponentialRampToValueAtTime(460, now + 0.08);
+    accentOscillator.type = "triangle";
+    accentOscillator.frequency.setValueAtTime(3200, now);
+    accentOscillator.frequency.exponentialRampToValueAtTime(1800, now + 0.012);
 
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(1200, now);
-    filter.Q.setValueAtTime(0.7, now);
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(1900, now);
+    filter.Q.setValueAtTime(1.8, now);
 
     gainNode.gain.setValueAtTime(0.0001, now);
-    gainNode.gain.exponentialRampToValueAtTime(0.13, now + 0.012);
-    gainNode.gain.exponentialRampToValueAtTime(0.045, now + 0.05);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+    gainNode.gain.exponentialRampToValueAtTime(0.08, now + 0.003);
+    gainNode.gain.exponentialRampToValueAtTime(0.018, now + 0.012);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
 
     mainOscillator.connect(filter);
-    overtoneOscillator.connect(filter);
+    accentOscillator.connect(filter);
     filter.connect(gainNode);
     gainNode.connect(context.destination);
 
     mainOscillator.start(now);
-    overtoneOscillator.start(now);
-    mainOscillator.stop(now + 0.16);
-    overtoneOscillator.stop(now + 0.14);
+    accentOscillator.start(now);
+    mainOscillator.stop(now + 0.035);
+    accentOscillator.stop(now + 0.022);
 }
 
 increaseButton.addEventListener("click", () => {
@@ -400,14 +402,23 @@ decreaseButton.addEventListener("click", () => {
     renderCount();
 });
 
-saveButton.addEventListener("click", openSaveModal);
-savedEntriesButton.addEventListener("click", openSavedEntriesModal);
+saveButton.addEventListener("click", () => {
+    playSaveClickSound();
+    openSaveModal();
+});
+savedEntriesButton.addEventListener("click", () => {
+    playSaveClickSound();
+    openSavedEntriesModal();
+});
 
 cancelSaveButton.addEventListener("click", closeSaveModal);
 confirmSaveButton.addEventListener("click", saveCurrentCount);
 modalBackdrop.addEventListener("click", closeSaveModal);
 
-closeSavedEntriesButton.addEventListener("click", closeSavedEntriesModal);
+closeSavedEntriesButton.addEventListener("click", () => {
+    playSaveClickSound();
+    closeSavedEntriesModal();
+});
 savedEntriesBackdrop.addEventListener("click", closeSavedEntriesModal);
 
 saveNameInput.addEventListener("input", () => {
