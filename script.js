@@ -411,7 +411,10 @@ savedEntriesButton.addEventListener("click", () => {
     openSavedEntriesModal();
 });
 
-cancelSaveButton.addEventListener("click", closeSaveModal);
+cancelSaveButton.addEventListener("click", () => {
+    playSaveClickSound();
+    closeSaveModal();
+});
 confirmSaveButton.addEventListener("click", saveCurrentCount);
 modalBackdrop.addEventListener("click", closeSaveModal);
 
