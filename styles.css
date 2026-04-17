@@ -22,16 +22,25 @@ body {
     font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
     color: var(--text);
     background-color: var(--beige-50);
-    background-image:
-        linear-gradient(rgba(255, 253, 249, 0.62), rgba(250, 245, 238, 0.62)),
-        url("/img/001.png");
-    background-size: auto, 340px 340px;
-    background-repeat: repeat, repeat;
-    background-position: center, center;
+    overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
 }
 
+.app-background {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-color: var(--beige-50);
+    background-image: url("./img/001.png");
+    background-size: 320px 320px;
+    background-repeat: repeat;
+    background-position: center top;
+    pointer-events: none;
+}
+
 .counter-app {
+    position: relative;
+    z-index: 1;
     min-height: 100vh;
     display: grid;
     place-items: center;
