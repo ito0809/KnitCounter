@@ -95,16 +95,6 @@ body {
     border-radius: 4px;
 }
 
-body.standalone-app .app-footer-links {
-    display: none;
-}
-
-@media (display-mode: standalone) {
-    .app-footer-links {
-        display: none;
-    }
-}
-
 .policy-back-link {
     display: inline-flex;
     align-items: center;
