@@ -33,6 +33,10 @@ const STORAGE_KEY = "knit-counter-value";
 const SET_STORAGE_KEY = "knit-counter-set-value";
 const SAVED_COUNTS_KEY = "knit-counter-saved-counts";
 
+if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true) {
+    document.body.classList.add("standalone-app");
+}
+
 let audioContext;
 let lastFocusedElement = null;
 let activeModal = null;
