@@ -35,7 +35,7 @@ body {
     background-size: 320px 320px;
     background-repeat: repeat;
     background-position: center top;
-    opacity: 0.45;
+    opacity: 0.3;
     pointer-events: none;
 }
 
@@ -78,7 +78,6 @@ h1 {
 }
 .count-display {
     position: relative;
-
     border-radius: 28px;
     background: linear-gradient(180deg, var(--sage-100) 0%, var(--sage-200) 100%);
     box-shadow:
@@ -111,7 +110,7 @@ h1 {
 .count-surface {
     position: relative;
     z-index: 1;
-    padding: 24px 20px 22px;
+    padding: 24px 20px 56px;
     border-radius: 20px;
     background: linear-gradient(180deg, #fffdfa 0%, var(--beige-50) 100%);
     box-shadow:
@@ -122,14 +121,14 @@ h1 {
 
 .count-label {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: var(--beige-400);
     letter-spacing: 0.03em;
 }
 
 .count-value {
     display: block;
-    margin-top: 10px;
+    margin-top: 16px;
     font-size: clamp(3.6rem, 14vw, 5.5rem);
     font-weight: 700;
     color: var(--beige-700);
@@ -141,15 +140,34 @@ h1 {
     animation: count-bump 0.22s ease;
 }
 
+.button-group {
+    display: grid;
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.button-section {
+    display: grid;
+    gap: 10px;
+}
+
+.button-section-label {
+    margin: 0;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--beige-700);
+    text-align: left;
+}
+
 .button-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
-    margin-top: 24px;
 }
 
 .count-button,
-.reset-button,
+.mini-count-button,
+.card-reset-button,
 .save-button,
 .modal-button {
     border: none;
@@ -170,36 +188,129 @@ h1 {
         inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
-.count-button.primary {
-    background: linear-gradient(180deg, #c9aa88 0%, #b59674 100%);
-    color: #fffdfa;
-    box-shadow:
-        0 14px 28px rgba(109, 84, 64, 0.16),
-        0 4px 10px rgba(181, 150, 116, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-.count-button.secondary {
-    background: linear-gradient(180deg, #c9aa88 0%, #b59674 100%);
-    color: #fffdfa;
-    box-shadow:
-        0 14px 28px rgba(109, 84, 64, 0.16),
-        0 4px 10px rgba(181, 150, 116, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-.reset-button {
-    margin-top: 25px;
-    padding: 14px 18px;
-    width: 100%;
+.mini-count-button {
+    width: 36px;
+    height: 36px;
     border-radius: 999px;
-    background: linear-gradient(180deg, #f7efe4 0%, #efe2d1 100%);
-    color: var(--beige-700);
+    font-size: 1.35rem;
     font-weight: 700;
+    line-height: 1;
+    display: grid;
+    place-items: center;
     box-shadow:
-        0 10px 22px rgba(109, 84, 64, 0.12),
-        0 3px 8px rgba(181, 150, 116, 0.14),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        0 10px 18px rgba(109, 84, 64, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.count-button.primary,
+.mini-count-button.primary {
+    background: linear-gradient(180deg, #c9aa88 0%, #b59674 100%);
+    color: #fffdfa;
+    box-shadow:
+        0 14px 28px rgba(109, 84, 64, 0.16),
+        0 4px 10px rgba(181, 150, 116, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.count-button.secondary,
+.mini-count-button.secondary {
+    background: linear-gradient(180deg, #c9aa88 0%, #b59674 100%);
+    color: #fffdfa;
+    box-shadow:
+        0 14px 28px rgba(109, 84, 64, 0.16),
+        0 4px 10px rgba(181, 150, 116, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.set-counter-card {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 18px 12px 16px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #fff7ee 0%, #f3e5d4 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 8px 16px rgba(109, 84, 64, 0.08);
+}
+
+.set-counter-prefix {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(109, 84, 64, 0.72);
+    letter-spacing: 0.03em;
+}
+
+.set-counter-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--beige-700);
+}
+
+.set-counter-controls {
+    position: relative;
+    display: grid;
+    align-items: center;
+    width: 100%;
+    justify-items: center;
+    margin-top: 6px;
+}
+
+.set-counter-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 30px;
+    justify-content: center;
+}
+
+.set-counter-value {
+    min-width: 1.8em;
+    text-align: center;
+    font-size: 2.15rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #8b6a4b;
+}
+
+.set-counter-suffix {
+    margin-left: 0.16em;
+    font-size: 0.34em;
+    font-weight: 400;
+    color: var(--beige-400);
+    letter-spacing: 0.03em;
+}
+
+.card-reset-button {
+    min-width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #efe5d6 0%, #e3d1bb 100%);
+    color: #8a5a3c;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    box-shadow:
+        0 8px 18px rgba(109, 84, 64, 0.1),
+        0 3px 8px rgba(181, 150, 116, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.set-reset-button {
+    position: absolute;
+    right: 8px;
+    margin-left: auto;
+    background: linear-gradient(180deg, #e7d3be 0%, #d7b798 100%);
+    color: #7a4d2f;
+}
+
+.count-surface > .card-reset-button {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
 }
 
 .save-button {
@@ -268,7 +379,8 @@ h1 {
 }
 
 .count-button:hover,
-.reset-button:hover,
+.mini-count-button:hover,
+.card-reset-button:hover,
 .save-button:hover,
 .modal-button:hover,
 .saved-entries-button:hover {
@@ -276,7 +388,8 @@ h1 {
 }
 
 .count-button:active,
-.reset-button:active,
+.mini-count-button:active,
+.card-reset-button:active,
 .save-button:active,
 .modal-button:active,
 .saved-entries-button:active {
@@ -284,7 +397,8 @@ h1 {
 }
 
 .count-button:focus-visible,
-.reset-button:focus-visible,
+.mini-count-button:focus-visible,
+.card-reset-button:focus-visible,
 .save-button:focus-visible,
 .modal-button:focus-visible,
 .saved-entries-button:focus-visible,
@@ -438,13 +552,19 @@ h1 {
 .modal-count-box {
     display: grid;
     gap: 6px;
-    margin-bottom: 18px;
     padding: 16px;
     border-radius: 20px;
     background: linear-gradient(180deg, #fffdfa 0%, #f4eadf 100%);
     box-shadow:
         0 10px 20px rgba(109, 84, 64, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.modal-count-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
 }
 
 .modal-count-label {
@@ -457,6 +577,10 @@ h1 {
     font-weight: 700;
     line-height: 1;
     color: var(--beige-700);
+}
+
+.modal-set-count-value {
+    color: #8b6a4b;
 }
 
 .modal-label {
@@ -543,6 +667,27 @@ h1 {
 
     .button-row {
         gap: 12px;
+    }
+
+    .set-counter-card {
+        gap: 10px;
+        padding: 18px 10px 14px;
+    }
+
+    .set-counter-prefix {
+        font-size: 0.68rem;
+    }
+
+    .set-counter-label {
+        font-size: 0.76rem;
+    }
+
+    .set-counter-controls {
+        gap: 8px;
+    }
+
+    .modal-count-grid {
+        grid-template-columns: 1fr;
     }
 
     .saved-item {
