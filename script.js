@@ -1,157 +1,612 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#faf5ee">
-    <meta name="apple-mobile-web-app-title" content="Knit Counter">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Knit Counter</title>
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico?v=20260420-5">
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico?v=20260420-5">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png?v=20260420-5">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png?v=20260420-5">
-    <link rel="icon" type="image/png" href="img/favicon.png?v=20260420-5">
-    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png?v=20260420-5">
-    <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-precomposed.png?v=20260420-5">
-    <link rel="manifest" href="manifest.webmanifest?v=20260420-5">
-    <link rel="stylesheet" href="styles.css?v=20260420-6">
-</head>
-<body>
-<div class="app-background" aria-hidden="true"></div>
-<main class="counter-app">
-    <section class="counter-card" aria-labelledby="app-title">
-        <button id="savedEntriesButton" class="saved-entries-button" type="button" aria-label="保存した段数を見る">
-            <span class="saved-entries-icon" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-            </span>
-        </button>
-        <h1 id="app-title">Knit Counter</h1>
-        <!--<p class="description">＋ボタンで段数を増やし、－ボタンで減らせます。</p> -->
+const countElement = document.getElementById("count");
+const setCountElement = document.getElementById("setCount");
+const increaseButton = document.getElementById("increaseButton");
+const decreaseButton = document.getElementById("decreaseButton");
+const increaseSetButton = document.getElementById("increaseSetButton");
+const decreaseSetButton = document.getElementById("decreaseSetButton");
+const saveButton = document.getElementById("saveButton");
+const resetButton = document.getElementById("resetButton");
+const resetSetButton = document.getElementById("resetSetButton");
+const savedEntriesButton = document.getElementById("savedEntriesButton");
+const savedListElement = document.getElementById("savedList");
+const savedCountElement = document.getElementById("savedCount");
 
-        <div class="count-display" aria-live="polite" aria-atomic="true">
-            <div class="count-surface">
-                <span class="count-label">現 在 の 段 数</span>
-                <span id="count" class="count-value">0</span>
-                <button id="resetButton" class="card-reset-button" type="button" aria-label="段数をリセットする">↺</button>
+const saveModal = document.getElementById("saveModal");
+const modalBackdrop = document.getElementById("modalBackdrop");
+const modalCurrentCount = document.getElementById("modalCurrentCount");
+const modalCurrentSetCount = document.getElementById("modalCurrentSetCount");
+const saveNameInput = document.getElementById("saveNameInput");
+const saveError = document.getElementById("saveError");
+const cancelSaveButton = document.getElementById("cancelSaveButton");
+const confirmSaveButton = document.getElementById("confirmSaveButton");
+
+const savedEntriesModal = document.getElementById("savedEntriesModal");
+const savedEntriesBackdrop = document.getElementById("savedEntriesBackdrop");
+const closeSavedEntriesButton = document.getElementById("closeSavedEntriesButton");
+const confirmResetModal = document.getElementById("confirmResetModal");
+const confirmResetBackdrop = document.getElementById("confirmResetBackdrop");
+const cancelResetButton = document.getElementById("cancelResetButton");
+const confirmResetButton = document.getElementById("confirmResetButton");
+const confirmResetDescription = document.getElementById("confirmResetDescription");
+
+const STORAGE_KEY = "knit-counter-value";
+const SET_STORAGE_KEY = "knit-counter-set-value";
+const SAVED_COUNTS_KEY = "knit-counter-saved-counts";
+
+let audioContext;
+let lastFocusedElement = null;
+let activeModal = null;
+let pendingResetType = null;
+
+let count = Number.parseInt(localStorage.getItem(STORAGE_KEY) ?? "0", 10);
+let setCount = Number.parseInt(localStorage.getItem(SET_STORAGE_KEY) ?? "1", 10);
+let savedCounts = readSavedCounts();
+
+if (Number.isNaN(count) || count < 0) {
+    count = 0;
+}
+
+if (Number.isNaN(setCount) || setCount < 1) {
+    setCount = 1;
+}
+
+function readSavedCounts() {
+    try {
+        const raw = localStorage.getItem(SAVED_COUNTS_KEY);
+
+        if (!raw) {
+            return [];
+        }
+
+        const parsed = JSON.parse(raw);
+
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
+
+        return parsed.flatMap((item) => {
+            if (
+                !item ||
+                typeof item.id !== "string" ||
+                typeof item.name !== "string" ||
+                !Number.isInteger(item.count) ||
+                item.count < 0 ||
+                typeof item.savedAt !== "string"
+            ) {
+                return [];
+            }
+
+            const normalizedSetCount = Number.isInteger(item.setCount) && item.setCount >= 1
+                ? item.setCount
+                : 1;
+
+            return [{
+                ...item,
+                setCount: normalizedSetCount
+            }];
+        });
+    } catch {
+        return [];
+    }
+}
+
+function writeSavedCounts() {
+    localStorage.setItem(SAVED_COUNTS_KEY, JSON.stringify(savedCounts));
+}
+
+function animateCounter(element) {
+    element.classList.remove("bump");
+    void element.offsetWidth;
+    element.classList.add("bump");
+}
+
+function renderCount() {
+    countElement.textContent = String(count);
+    localStorage.setItem(STORAGE_KEY, String(count));
+    animateCounter(countElement);
+}
+
+function renderSetCount() {
+    setCountElement.innerHTML = `${setCount}<span class="set-counter-suffix"> セ ッ ト 目</span>`;
+    localStorage.setItem(SET_STORAGE_KEY, String(setCount));
+    animateCounter(setCountElement);
+}
+
+function formatSavedDate(savedAt) {
+    const date = new Date(savedAt);
+
+    if (Number.isNaN(date.getTime())) {
+        return "";
+    }
+
+    return new Intl.DateTimeFormat("ja-JP", {
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    }).format(date);
+}
+
+function escapeHtml(value) {
+    return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+}
+
+function renderSavedCounts() {
+    savedCountElement.textContent = `${savedCounts.length}件`;
+
+    if (savedCounts.length === 0) {
+        savedListElement.innerHTML = '<p class="saved-empty">まだ保存された段数はありません。</p>';
+        return;
+    }
+
+    savedListElement.innerHTML = savedCounts.map((item) => `
+        <article class="saved-item">
+            <button
+                class="saved-item-button"
+                type="button"
+                data-action="load"
+                data-id="${item.id}"
+                aria-label="${escapeHtml(item.name)} を読み込む"
+            >
+                <span class="saved-item-name">${escapeHtml(item.name)}</span>
+                <span class="saved-item-meta">${item.count}段 ・ ${item.setCount}セット ・ ${escapeHtml(formatSavedDate(item.savedAt))}</span>
+            </button>
+            <div class="saved-item-actions">
+                <button
+                    class="saved-delete-button"
+                    type="button"
+                    data-action="delete"
+                    data-id="${item.id}"
+                    aria-label="${escapeHtml(item.name)} を削除"
+                >
+                    ×
+                </button>
             </div>
-        </div>
+        </article>
+    `).join("");
+}
 
-        <div class="set-counter-card">
-            <span id="setCount" class="set-counter-value">0</span>
-            <div class="set-counter-controls">
-                <div class="set-counter-stepper">
-                    <button id="decreaseSetButton" class="mini-count-button secondary" type="button" aria-label="セット数を1つ減らす">−</button>
-                    <button id="increaseSetButton" class="mini-count-button primary" type="button" aria-label="セット数を1つ増やす">＋</button>
-                </div>
-                <button id="resetSetButton" class="card-reset-button set-reset-button" type="button" aria-label="セット数をリセットする">↺</button>
-            </div>
-        </div>
+function openModal(modalElement, focusElement) {
+    if (activeModal && activeModal !== modalElement) {
+        activeModal.hidden = true;
+    }
 
-        <div class="button-group">
-            <div class="button-section">
-<!--                <p class="button-section-label">段数</p>-->
-                <div class="button-row">
-                    <button id="decreaseButton" class="count-button secondary" type="button" aria-label="段数を1つ減らす">−</button>
-                    <button id="increaseButton" class="count-button primary" type="button" aria-label="段数を1つ増やす">＋</button>
-                </div>
-            </div>
-        </div>
+    if (!activeModal) {
+        lastFocusedElement = document.activeElement;
+        document.body.style.overflow = "hidden";
+    }
 
-        <button id="saveButton" class="save-button" type="button">記 録 す る</button>
-    </section>
+    activeModal = modalElement;
+    modalElement.hidden = false;
 
-    <nav class="app-footer-links" aria-label="フッターリンク">
-        <a class="footer-link" href="privacy.html">プライバシーポリシー</a>
-    </nav>
-</main>
+    if (focusElement instanceof HTMLElement) {
+        window.setTimeout(() => {
+            focusElement.focus();
+        }, 0);
+    }
+}
 
-<div id="saveModal" class="modal" hidden>
-    <div id="modalBackdrop" class="modal-backdrop"></div>
-    <section
-        class="modal-card"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="saveModalTitle"
-        aria-describedby="saveModalDescription"
-    >
-        <h2 id="saveModalTitle">記 録 す る</h2>
-        <p id="saveModalDescription" class="modal-description">名前をつけて記録できます。</p>
+function closeModal(modalElement) {
+    modalElement.hidden = true;
 
-        <div class="modal-count-grid">
-            <div class="modal-count-box">
-                <span class="modal-count-label">現在の段数</span>
-                <span id="modalCurrentCount" class="modal-count-value">0</span>
-            </div>
+    if (activeModal === modalElement) {
+        activeModal = null;
+        document.body.style.overflow = "";
 
-            <div class="modal-count-box">
-                <span class="modal-count-label">現在のセット数</span>
-                <span id="modalCurrentSetCount" class="modal-count-value modal-set-count-value">0</span>
-            </div>
-        </div>
+        if (lastFocusedElement instanceof HTMLElement) {
+            lastFocusedElement.focus();
+        }
+    }
+}
 
-        <label class="modal-label" for="saveNameInput">保存名</label>
-        <input
-            id="saveNameInput"
-            class="modal-input"
-            type="text"
-            maxlength="40"
-            placeholder="例: 身頃 "
-        >
+function openSaveModal() {
+    modalCurrentCount.textContent = String(count);
+    modalCurrentSetCount.textContent = String(setCount);
+    saveNameInput.value = "";
+    saveError.hidden = true;
+    openModal(saveModal, saveNameInput);
+}
 
-        <p id="saveError" class="modal-error" hidden>名前を入力してください。</p>
+function closeSaveModal() {
+    saveError.hidden = true;
+    closeModal(saveModal);
+}
 
-        <div class="modal-actions">
-            <button id="cancelSaveButton" class="modal-button secondary" type="button">キャンセル</button>
-            <button id="confirmSaveButton" class="modal-button primary" type="button">保存する</button>
-        </div>
-    </section>
-</div>
+function closeSaveModalWithSound() {
+    playSaveClickSound();
+    window.setTimeout(closeSaveModal, 60);
+}
 
-<div id="savedEntriesModal" class="modal" hidden>
-    <div id="savedEntriesBackdrop" class="modal-backdrop"></div>
-    <section
-        class="modal-card saved-modal-card"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="savedEntriesTitle"
-    >
-        <div class="saved-modal-header">
-            <div>
-                <h2 id="savedEntriesTitle">これまでの記録</h2>
+function openSavedEntriesModal() {
+    renderSavedCounts();
+    openModal(savedEntriesModal, closeSavedEntriesButton);
+}
 
-            </div>
-            <span id="savedCount" class="saved-count">0件</span>
-        </div>
+function closeSavedEntriesModal() {
+    closeModal(savedEntriesModal);
+}
 
-        <div id="savedList" class="saved-list" aria-live="polite"></div>
+function openConfirmResetModal(type) {
+    pendingResetType = type;
+    confirmResetDescription.innerHTML = type === "count"
+        ? "現在の段数を0に戻します。<br>よろしいですか？"
+        : "現在のセット数を1に戻します。<br>よろしいですか？";
+    openModal(confirmResetModal, cancelResetButton);
+}
 
-        <div class="modal-actions single-action">
-            <button id="closeSavedEntriesButton" class="modal-button secondary" type="button">閉じる</button>
-        </div>
-    </section>
-</div>
+function closeConfirmResetModal() {
+    pendingResetType = null;
+    closeModal(confirmResetModal);
+}
 
-<div id="confirmResetModal" class="modal" hidden>
-    <div id="confirmResetBackdrop" class="modal-backdrop"></div>
-    <section
-        class="modal-card confirm-reset-card"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="confirmResetTitle"
-        aria-describedby="confirmResetDescription"
-    >
-        <h2 id="confirmResetTitle">リセットの確認</h2>
-        <p id="confirmResetDescription" class="modal-description">この値を0に戻します。よろしいですか？</p>
-        <div class="modal-actions">
-            <button id="cancelResetButton" class="modal-button secondary" type="button">キャンセル</button>
-            <button id="confirmResetButton" class="modal-button primary" type="button">戻す</button>
-        </div>
-    </section>
-</div>
+function closeConfirmResetModalWithSound() {
+    playSaveClickSound();
+    closeConfirmResetModal();
+}
 
-<script src="script.js?v=20260420-6"></script>
-</body>
-</html>
+function confirmReset() {
+    if (pendingResetType === "count") {
+        if (count > 0) {
+            count = 0;
+            playResetSound();
+            renderCount();
+        }
+
+        closeConfirmResetModal();
+        return;
+    }
+
+    if (pendingResetType === "set") {
+        if (setCount !== 1) {
+            setCount = 1;
+            playResetSound();
+            renderSetCount();
+        }
+
+        closeConfirmResetModal();
+    }
+}
+
+function saveCurrentCount() {
+    const name = saveNameInput.value.trim();
+
+    if (!name) {
+        saveError.hidden = false;
+        saveNameInput.focus();
+        return;
+    }
+
+    savedCounts.unshift({
+        id: `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
+        name,
+        count,
+        setCount,
+        savedAt: new Date().toISOString()
+    });
+
+    writeSavedCounts();
+    renderSavedCounts();
+    playSaveClickSound();
+    closeSaveModal();
+}
+
+function loadSavedCount(id) {
+    const item = savedCounts.find((entry) => entry.id === id);
+
+    if (!item) {
+        return;
+    }
+
+    playSaveClickSound();
+    count = item.count;
+    setCount = item.setCount;
+    renderCount();
+    renderSetCount();
+    closeSavedEntriesModal();
+}
+
+function deleteSavedCount(id) {
+    const nextSavedCounts = savedCounts.filter((entry) => entry.id !== id);
+
+    if (nextSavedCounts.length === savedCounts.length) {
+        return;
+    }
+
+    playSaveClickSound();
+    savedCounts = nextSavedCounts;
+    writeSavedCounts();
+    renderSavedCounts();
+}
+
+function getAudioContext() {
+    if (!audioContext) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContextClass) {
+            return null;
+        }
+
+        audioContext = new AudioContextClass();
+    }
+
+    if (audioContext.state === "suspended") {
+        audioContext.resume().catch(() => {});
+    }
+
+    return audioContext;
+}
+
+function playPokoSound(pitch = "up") {
+    const context = getAudioContext();
+
+    if (!context) {
+        return;
+    }
+
+    const now = context.currentTime;
+    const oscillator = context.createOscillator();
+    const overtone = context.createOscillator();
+    const gainNode = context.createGain();
+    const filter = context.createBiquadFilter();
+    const isLowerPitch = pitch === "down";
+
+    const baseFrequency = isLowerPitch ? 360 : 420;
+    const endFrequency = isLowerPitch ? 240 : 280;
+    const overtoneStart = isLowerPitch ? 560 : 680;
+    const overtoneEnd = isLowerPitch ? 390 : 480;
+
+    oscillator.type = "triangle";
+    oscillator.frequency.setValueAtTime(baseFrequency, now);
+    oscillator.frequency.exponentialRampToValueAtTime(endFrequency, now + 0.12);
+
+    overtone.type = "sine";
+    overtone.frequency.setValueAtTime(overtoneStart, now);
+    overtone.frequency.exponentialRampToValueAtTime(overtoneEnd, now + 0.09);
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(1400, now);
+
+    gainNode.gain.setValueAtTime(0.0001, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.16, now + 0.015);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+    oscillator.connect(filter);
+    overtone.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    oscillator.start(now);
+    overtone.start(now);
+    oscillator.stop(now + 0.2);
+    overtone.stop(now + 0.2);
+}
+
+function playResetSound() {
+    const context = getAudioContext();
+
+    if (!context) {
+        return;
+    }
+
+    const now = context.currentTime;
+    const firstOscillator = context.createOscillator();
+    const secondOscillator = context.createOscillator();
+    const shimmer = context.createOscillator();
+    const gainNode = context.createGain();
+    const filter = context.createBiquadFilter();
+
+    firstOscillator.type = "sine";
+    firstOscillator.frequency.setValueAtTime(520, now);
+    firstOscillator.frequency.exponentialRampToValueAtTime(390, now + 0.14);
+
+    secondOscillator.type = "triangle";
+    secondOscillator.frequency.setValueAtTime(390, now + 0.06);
+    secondOscillator.frequency.exponentialRampToValueAtTime(260, now + 0.24);
+
+    shimmer.type = "sine";
+    shimmer.frequency.setValueAtTime(780, now);
+    shimmer.frequency.exponentialRampToValueAtTime(620, now + 0.12);
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(1500, now);
+
+    gainNode.gain.setValueAtTime(0.0001, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.12, now + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.09, now + 0.1);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+
+    firstOscillator.connect(filter);
+    secondOscillator.connect(filter);
+    shimmer.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    firstOscillator.start(now);
+    shimmer.start(now);
+    secondOscillator.start(now + 0.06);
+
+    firstOscillator.stop(now + 0.16);
+    shimmer.stop(now + 0.14);
+    secondOscillator.stop(now + 0.28);
+}
+
+function playSaveClickSound() {
+    const context = getAudioContext();
+
+    if (!context) {
+        return;
+    }
+
+    const now = context.currentTime;
+    const mainOscillator = context.createOscillator();
+    const accentOscillator = context.createOscillator();
+    const gainNode = context.createGain();
+    const filter = context.createBiquadFilter();
+
+    mainOscillator.type = "square";
+    mainOscillator.frequency.setValueAtTime(2100, now);
+    mainOscillator.frequency.exponentialRampToValueAtTime(1100, now + 0.018);
+
+    accentOscillator.type = "triangle";
+    accentOscillator.frequency.setValueAtTime(3200, now);
+    accentOscillator.frequency.exponentialRampToValueAtTime(1800, now + 0.012);
+
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(1900, now);
+    filter.Q.setValueAtTime(1.8, now);
+
+    gainNode.gain.setValueAtTime(0.0001, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.08, now + 0.003);
+    gainNode.gain.exponentialRampToValueAtTime(0.018, now + 0.012);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+
+    mainOscillator.connect(filter);
+    accentOscillator.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    mainOscillator.start(now);
+    accentOscillator.start(now);
+    mainOscillator.stop(now + 0.035);
+    accentOscillator.stop(now + 0.022);
+}
+
+increaseButton.addEventListener("click", () => {
+    count += 1;
+    playPokoSound("up");
+    renderCount();
+});
+
+decreaseButton.addEventListener("click", () => {
+    if (count === 0) {
+        return;
+    }
+
+    count -= 1;
+    playPokoSound("down");
+    renderCount();
+});
+
+increaseSetButton.addEventListener("click", () => {
+    setCount += 1;
+    playPokoSound("up");
+    renderSetCount();
+});
+
+decreaseSetButton.addEventListener("click", () => {
+    if (setCount === 1) {
+        return;
+    }
+
+    setCount -= 1;
+    playPokoSound("down");
+    renderSetCount();
+});
+
+saveButton.addEventListener("click", () => {
+    playSaveClickSound();
+    openSaveModal();
+});
+savedEntriesButton.addEventListener("click", () => {
+    playSaveClickSound();
+    openSavedEntriesModal();
+});
+
+cancelSaveButton.addEventListener("click", closeSaveModalWithSound);
+confirmSaveButton.addEventListener("click", saveCurrentCount);
+modalBackdrop.addEventListener("click", closeSaveModal);
+
+closeSavedEntriesButton.addEventListener("click", () => {
+    playSaveClickSound();
+    closeSavedEntriesModal();
+});
+savedEntriesBackdrop.addEventListener("click", closeSavedEntriesModal);
+cancelResetButton.addEventListener("click", closeConfirmResetModalWithSound);
+confirmResetBackdrop.addEventListener("click", closeConfirmResetModal);
+confirmResetButton.addEventListener("click", confirmReset);
+
+saveNameInput.addEventListener("input", () => {
+    if (!saveError.hidden) {
+        saveError.hidden = true;
+    }
+});
+
+saveNameInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        saveCurrentCount();
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !activeModal) {
+        return;
+    }
+
+    if (activeModal === saveModal) {
+        closeSaveModal();
+    }
+
+    if (activeModal === savedEntriesModal) {
+        closeSavedEntriesModal();
+    }
+
+    if (activeModal === confirmResetModal) {
+        closeConfirmResetModal();
+    }
+});
+
+savedListElement.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (!(target instanceof HTMLElement)) {
+        return;
+    }
+
+    const actionElement = target.closest("[data-action]");
+
+    if (!(actionElement instanceof HTMLElement)) {
+        return;
+    }
+
+    const id = actionElement.dataset.id;
+
+    if (!id) {
+        return;
+    }
+
+    if (actionElement.dataset.action === "load") {
+        loadSavedCount(id);
+    }
+
+    if (actionElement.dataset.action === "delete") {
+        deleteSavedCount(id);
+    }
+});
+
+resetButton.addEventListener("click", () => {
+    if (count === 0) {
+        return;
+    }
+
+    playSaveClickSound();
+    openConfirmResetModal("count");
+});
+
+resetSetButton.addEventListener("click", () => {
+    if (setCount === 1) {
+        return;
+    }
+
+    playSaveClickSound();
+    openConfirmResetModal("set");
+});
+
+renderCount();
+renderSetCount();
+renderSavedCounts();
