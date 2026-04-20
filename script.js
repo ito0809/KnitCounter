@@ -1,8 +1,12 @@
 const countElement = document.getElementById("count");
+const setCountElement = document.getElementById("setCount");
 const increaseButton = document.getElementById("increaseButton");
 const decreaseButton = document.getElementById("decreaseButton");
+const increaseSetButton = document.getElementById("increaseSetButton");
+const decreaseSetButton = document.getElementById("decreaseSetButton");
 const saveButton = document.getElementById("saveButton");
 const resetButton = document.getElementById("resetButton");
+const resetSetButton = document.getElementById("resetSetButton");
 const savedEntriesButton = document.getElementById("savedEntriesButton");
 const savedListElement = document.getElementById("savedList");
 const savedCountElement = document.getElementById("savedCount");
@@ -10,6 +14,7 @@ const savedCountElement = document.getElementById("savedCount");
 const saveModal = document.getElementById("saveModal");
 const modalBackdrop = document.getElementById("modalBackdrop");
 const modalCurrentCount = document.getElementById("modalCurrentCount");
+const modalCurrentSetCount = document.getElementById("modalCurrentSetCount");
 const saveNameInput = document.getElementById("saveNameInput");
 const saveError = document.getElementById("saveError");
 const cancelSaveButton = document.getElementById("cancelSaveButton");
@@ -18,19 +23,31 @@ const confirmSaveButton = document.getElementById("confirmSaveButton");
 const savedEntriesModal = document.getElementById("savedEntriesModal");
 const savedEntriesBackdrop = document.getElementById("savedEntriesBackdrop");
 const closeSavedEntriesButton = document.getElementById("closeSavedEntriesButton");
+const confirmResetModal = document.getElementById("confirmResetModal");
+const confirmResetBackdrop = document.getElementById("confirmResetBackdrop");
+const cancelResetButton = document.getElementById("cancelResetButton");
+const confirmResetButton = document.getElementById("confirmResetButton");
+const confirmResetDescription = document.getElementById("confirmResetDescription");
 
 const STORAGE_KEY = "knit-counter-value";
+const SET_STORAGE_KEY = "knit-counter-set-value";
 const SAVED_COUNTS_KEY = "knit-counter-saved-counts";
 
 let audioContext;
 let lastFocusedElement = null;
 let activeModal = null;
+let pendingResetType = null;
 
 let count = Number.parseInt(localStorage.getItem(STORAGE_KEY) ?? "0", 10);
+let setCount = Number.parseInt(localStorage.getItem(SET_STORAGE_KEY) ?? "1", 10);
 let savedCounts = readSavedCounts();
 
 if (Number.isNaN(count) || count < 0) {
     count = 0;
+}
+
+if (Number.isNaN(setCount) || setCount < 1) {
+    setCount = 1;
 }
 
 function readSavedCounts() {
@@ -47,14 +64,27 @@ function readSavedCounts() {
             return [];
         }
 
-        return parsed.filter((item) => (
-            item &&
-            typeof item.id === "string" &&
-            typeof item.name === "string" &&
-            Number.isInteger(item.count) &&
-            item.count >= 0 &&
-            typeof item.savedAt === "string"
-        ));
+        return parsed.flatMap((item) => {
+            if (
+                !item ||
+                typeof item.id !== "string" ||
+                typeof item.name !== "string" ||
+                !Number.isInteger(item.count) ||
+                item.count < 0 ||
+                typeof item.savedAt !== "string"
+            ) {
+                return [];
+            }
+
+            const normalizedSetCount = Number.isInteger(item.setCount) && item.setCount >= 1
+                ? item.setCount
+                : 1;
+
+            return [{
+                ...item,
+                setCount: normalizedSetCount
+            }];
+        });
     } catch {
         return [];
     }
@@ -64,12 +94,22 @@ function writeSavedCounts() {
     localStorage.setItem(SAVED_COUNTS_KEY, JSON.stringify(savedCounts));
 }
 
+function animateCounter(element) {
+    element.classList.remove("bump");
+    void element.offsetWidth;
+    element.classList.add("bump");
+}
+
 function renderCount() {
     countElement.textContent = String(count);
     localStorage.setItem(STORAGE_KEY, String(count));
-    countElement.classList.remove("bump");
-    void countElement.offsetWidth;
-    countElement.classList.add("bump");
+    animateCounter(countElement);
+}
+
+function renderSetCount() {
+    setCountElement.innerHTML = `${setCount}<span class="set-counter-suffix"> セ ッ ト 目</span>`;
+    localStorage.setItem(SET_STORAGE_KEY, String(setCount));
+    animateCounter(setCountElement);
 }
 
 function formatSavedDate(savedAt) {
@@ -114,7 +154,7 @@ function renderSavedCounts() {
                 aria-label="${escapeHtml(item.name)} を読み込む"
             >
                 <span class="saved-item-name">${escapeHtml(item.name)}</span>
-                <span class="saved-item-meta">${item.count}段 ・ ${escapeHtml(formatSavedDate(item.savedAt))}</span>
+                <span class="saved-item-meta">${item.count}段 ・ ${item.setCount}セット ・ ${escapeHtml(formatSavedDate(item.savedAt))}</span>
             </button>
             <div class="saved-item-actions">
                 <button
@@ -166,6 +206,7 @@ function closeModal(modalElement) {
 
 function openSaveModal() {
     modalCurrentCount.textContent = String(count);
+    modalCurrentSetCount.textContent = String(setCount);
     saveNameInput.value = "";
     saveError.hidden = true;
     openModal(saveModal, saveNameInput);
@@ -190,6 +231,47 @@ function closeSavedEntriesModal() {
     closeModal(savedEntriesModal);
 }
 
+function openConfirmResetModal(type) {
+    pendingResetType = type;
+    confirmResetDescription.innerHTML = type === "count"
+        ? "現在の段数を0に戻します。<br>よろしいですか？"
+        : "現在のセット数を1に戻します。<br>よろしいですか？";
+    openModal(confirmResetModal, cancelResetButton);
+}
+
+function closeConfirmResetModal() {
+    pendingResetType = null;
+    closeModal(confirmResetModal);
+}
+
+function closeConfirmResetModalWithSound() {
+    playSaveClickSound();
+    closeConfirmResetModal();
+}
+
+function confirmReset() {
+    if (pendingResetType === "count") {
+        if (count > 0) {
+            count = 0;
+            playResetSound();
+            renderCount();
+        }
+
+        closeConfirmResetModal();
+        return;
+    }
+
+    if (pendingResetType === "set") {
+        if (setCount !== 1) {
+            setCount = 1;
+            playResetSound();
+            renderSetCount();
+        }
+
+        closeConfirmResetModal();
+    }
+}
+
 function saveCurrentCount() {
     const name = saveNameInput.value.trim();
 
@@ -203,6 +285,7 @@ function saveCurrentCount() {
         id: `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
         name,
         count,
+        setCount,
         savedAt: new Date().toISOString()
     });
 
@@ -221,7 +304,9 @@ function loadSavedCount(id) {
 
     playSaveClickSound();
     count = item.count;
+    setCount = item.setCount;
     renderCount();
+    renderSetCount();
     closeSavedEntriesModal();
 }
 
@@ -407,6 +492,22 @@ decreaseButton.addEventListener("click", () => {
     renderCount();
 });
 
+increaseSetButton.addEventListener("click", () => {
+    setCount += 1;
+    playPokoSound("up");
+    renderSetCount();
+});
+
+decreaseSetButton.addEventListener("click", () => {
+    if (setCount === 1) {
+        return;
+    }
+
+    setCount -= 1;
+    playPokoSound("down");
+    renderSetCount();
+});
+
 saveButton.addEventListener("click", () => {
     playSaveClickSound();
     openSaveModal();
@@ -425,6 +526,9 @@ closeSavedEntriesButton.addEventListener("click", () => {
     closeSavedEntriesModal();
 });
 savedEntriesBackdrop.addEventListener("click", closeSavedEntriesModal);
+cancelResetButton.addEventListener("click", closeConfirmResetModalWithSound);
+confirmResetBackdrop.addEventListener("click", closeConfirmResetModal);
+confirmResetButton.addEventListener("click", confirmReset);
 
 saveNameInput.addEventListener("input", () => {
     if (!saveError.hidden) {
@@ -450,6 +554,10 @@ document.addEventListener("keydown", (event) => {
 
     if (activeModal === savedEntriesModal) {
         closeSavedEntriesModal();
+    }
+
+    if (activeModal === confirmResetModal) {
+        closeConfirmResetModal();
     }
 });
 
@@ -486,10 +594,19 @@ resetButton.addEventListener("click", () => {
         return;
     }
 
-    count = 0;
-    playResetSound();
-    renderCount();
+    playSaveClickSound();
+    openConfirmResetModal("count");
+});
+
+resetSetButton.addEventListener("click", () => {
+    if (setCount === 1) {
+        return;
+    }
+
+    playSaveClickSound();
+    openConfirmResetModal("set");
 });
 
 renderCount();
+renderSetCount();
 renderSavedCounts();
