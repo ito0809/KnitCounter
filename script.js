@@ -590,20 +590,22 @@ savedListElement.addEventListener("click", (event) => {
 });
 
 resetButton.addEventListener("click", () => {
+    playSaveClickSound();
+
     if (count === 0) {
         return;
     }
 
-    playSaveClickSound();
     openConfirmResetModal("count");
 });
 
 resetSetButton.addEventListener("click", () => {
+    playSaveClickSound();
+
     if (setCount === 1) {
         return;
     }
 
-    playSaveClickSound();
     openConfirmResetModal("set");
 });
 
