@@ -15,7 +15,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png?v=20260420-5">
     <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-precomposed.png?v=20260420-5">
     <link rel="manifest" href="manifest.webmanifest?v=20260420-5">
-    <link rel="stylesheet" href="styles.css?v=20260417-4">
+    <link rel="stylesheet" href="styles.css?v=20260420-6">
 </head>
 <body>
 <div class="app-background" aria-hidden="true"></div>
@@ -35,16 +35,32 @@
             <div class="count-surface">
                 <span class="count-label">現 在 の 段 数</span>
                 <span id="count" class="count-value">0</span>
+                <button id="resetButton" class="card-reset-button" type="button" aria-label="段数をリセットする">↺</button>
             </div>
         </div>
 
-        <div class="button-row">
-            <button id="decreaseButton" class="count-button secondary" type="button" aria-label="段数を1つ減らす">−</button>
-            <button id="increaseButton" class="count-button primary" type="button" aria-label="段数を1つ増やす">＋</button>
+        <div class="set-counter-card">
+            <span id="setCount" class="set-counter-value">0</span>
+            <div class="set-counter-controls">
+                <div class="set-counter-stepper">
+                    <button id="decreaseSetButton" class="mini-count-button secondary" type="button" aria-label="セット数を1つ減らす">−</button>
+                    <button id="increaseSetButton" class="mini-count-button primary" type="button" aria-label="セット数を1つ増やす">＋</button>
+                </div>
+                <button id="resetSetButton" class="card-reset-button set-reset-button" type="button" aria-label="セット数をリセットする">↺</button>
+            </div>
         </div>
 
-        <button id="resetButton" class="reset-button" type="button">0に戻す</button>
-        <button id="saveButton" class="save-button" type="button">現在の段数を保存</button>
+        <div class="button-group">
+            <div class="button-section">
+<!--                <p class="button-section-label">段数</p>-->
+                <div class="button-row">
+                    <button id="decreaseButton" class="count-button secondary" type="button" aria-label="段数を1つ減らす">−</button>
+                    <button id="increaseButton" class="count-button primary" type="button" aria-label="段数を1つ増やす">＋</button>
+                </div>
+            </div>
+        </div>
+
+        <button id="saveButton" class="save-button" type="button">記 録 す る</button>
     </section>
 </main>
 
@@ -57,12 +73,19 @@
         aria-labelledby="saveModalTitle"
         aria-describedby="saveModalDescription"
     >
-        <h2 id="saveModalTitle">段数を保存</h2>
-        <p id="saveModalDescription" class="modal-description">今の段数に名前を付けて保存できます。</p>
+        <h2 id="saveModalTitle">記 録 す る</h2>
+        <p id="saveModalDescription" class="modal-description">名前をつけて記録できます。</p>
 
-        <div class="modal-count-box">
-            <span class="modal-count-label">現在の段数</span>
-            <span id="modalCurrentCount" class="modal-count-value">0</span>
+        <div class="modal-count-grid">
+            <div class="modal-count-box">
+                <span class="modal-count-label">現在の段数</span>
+                <span id="modalCurrentCount" class="modal-count-value">0</span>
+            </div>
+
+            <div class="modal-count-box">
+                <span class="modal-count-label">現在のセット数</span>
+                <span id="modalCurrentSetCount" class="modal-count-value modal-set-count-value">0</span>
+            </div>
         </div>
 
         <label class="modal-label" for="saveNameInput">保存名</label>
@@ -71,7 +94,7 @@
             class="modal-input"
             type="text"
             maxlength="40"
-            placeholder="例: 身頃 42段目"
+            placeholder="例: 身頃 "
         >
 
         <p id="saveError" class="modal-error" hidden>名前を入力してください。</p>
@@ -107,6 +130,24 @@
     </section>
 </div>
 
-<script src="script.js?v=20260417-2"></script>
+<div id="confirmResetModal" class="modal" hidden>
+    <div id="confirmResetBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card confirm-reset-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmResetTitle"
+        aria-describedby="confirmResetDescription"
+    >
+        <h2 id="confirmResetTitle">リセットの確認</h2>
+        <p id="confirmResetDescription" class="modal-description">この値を0に戻します。よろしいですか？</p>
+        <div class="modal-actions">
+            <button id="cancelResetButton" class="modal-button secondary" type="button">キャンセル</button>
+            <button id="confirmResetButton" class="modal-button primary" type="button">戻す</button>
+        </div>
+    </section>
+</div>
+
+<script src="script.js?v=20260420-6"></script>
 </body>
 </html>
