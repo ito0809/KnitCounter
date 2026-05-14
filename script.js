@@ -23,6 +23,20 @@ const confirmSaveButton = document.getElementById("confirmSaveButton");
 const savedEntriesModal = document.getElementById("savedEntriesModal");
 const savedEntriesBackdrop = document.getElementById("savedEntriesBackdrop");
 const closeSavedEntriesButton = document.getElementById("closeSavedEntriesButton");
+const menuModal = document.getElementById("menuModal");
+const menuBackdrop = document.getElementById("menuBackdrop");
+const menuSavedButton = document.getElementById("menuSavedButton");
+const themeToggleButton = document.getElementById("themeToggleButton");
+const settingsButton = document.getElementById("settingsButton");
+const closeMenuButton = document.getElementById("closeMenuButton");
+const themeModal = document.getElementById("themeModal");
+const themeBackdrop = document.getElementById("themeBackdrop");
+const themeMilkYarnButton = document.getElementById("themeMilkYarnButton");
+const themePaperButton = document.getElementById("themePaperButton");
+const closeThemeButton = document.getElementById("closeThemeButton");
+const settingsModal = document.getElementById("settingsModal");
+const settingsBackdrop = document.getElementById("settingsBackdrop");
+const closeSettingsButton = document.getElementById("closeSettingsButton");
 const confirmResetModal = document.getElementById("confirmResetModal");
 const confirmResetBackdrop = document.getElementById("confirmResetBackdrop");
 const cancelResetButton = document.getElementById("cancelResetButton");
@@ -32,6 +46,7 @@ const confirmResetDescription = document.getElementById("confirmResetDescription
 const STORAGE_KEY = "knit-counter-value";
 const SET_STORAGE_KEY = "knit-counter-set-value";
 const SAVED_COUNTS_KEY = "knit-counter-saved-counts";
+const THEME_STORAGE_KEY = "knit-counter-theme";
 
 let audioContext;
 let lastFocusedElement = null;
@@ -41,6 +56,7 @@ let pendingResetType = null;
 let count = Number.parseInt(localStorage.getItem(STORAGE_KEY) ?? "0", 10);
 let setCount = Number.parseInt(localStorage.getItem(SET_STORAGE_KEY) ?? "1", 10);
 let savedCounts = readSavedCounts();
+let currentTheme = localStorage.getItem(THEME_STORAGE_KEY) === "clean" ? "clean" : "classic";
 
 if (Number.isNaN(count) || count < 0) {
     count = 0;
@@ -171,6 +187,14 @@ function renderSavedCounts() {
     `).join("");
 }
 
+function renderTheme() {
+    document.body.classList.toggle("theme-clean", currentTheme === "clean");
+    themeToggleButton.textContent = "テーマ変更";
+    themeMilkYarnButton.setAttribute("aria-pressed", String(currentTheme === "classic"));
+    themePaperButton.setAttribute("aria-pressed", String(currentTheme === "clean"));
+    localStorage.setItem(THEME_STORAGE_KEY, currentTheme);
+}
+
 function openModal(modalElement, focusElement) {
     if (activeModal && activeModal !== modalElement) {
         activeModal.hidden = true;
@@ -229,6 +253,38 @@ function openSavedEntriesModal() {
 
 function closeSavedEntriesModal() {
     closeModal(savedEntriesModal);
+}
+
+function openMenuModal() {
+    openModal(menuModal, menuSavedButton);
+}
+
+function closeMenuModal() {
+    closeModal(menuModal);
+}
+
+function openThemeModal() {
+    renderTheme();
+    openModal(themeModal, currentTheme === "clean" ? themePaperButton : themeMilkYarnButton);
+}
+
+function closeThemeModal() {
+    closeModal(themeModal);
+}
+
+function openSettingsModal() {
+    openModal(settingsModal, closeSettingsButton);
+}
+
+function closeSettingsModal() {
+    closeModal(settingsModal);
+}
+
+function selectTheme(theme) {
+    currentTheme = theme;
+    renderTheme();
+    playSaveClickSound();
+    closeThemeModal();
 }
 
 function openConfirmResetModal(type) {
@@ -514,8 +570,48 @@ saveButton.addEventListener("click", () => {
 });
 savedEntriesButton.addEventListener("click", () => {
     playSaveClickSound();
+    openMenuModal();
+});
+
+menuSavedButton.addEventListener("click", () => {
+    playSaveClickSound();
     openSavedEntriesModal();
 });
+
+themeToggleButton.addEventListener("click", () => {
+    playSaveClickSound();
+    openThemeModal();
+});
+
+themeMilkYarnButton.addEventListener("click", () => {
+    selectTheme("classic");
+});
+
+themePaperButton.addEventListener("click", () => {
+    selectTheme("clean");
+});
+
+settingsButton.addEventListener("click", () => {
+    playSaveClickSound();
+    openSettingsModal();
+});
+
+closeMenuButton.addEventListener("click", () => {
+    playSaveClickSound();
+    closeMenuModal();
+});
+
+menuBackdrop.addEventListener("click", closeMenuModal);
+closeThemeButton.addEventListener("click", () => {
+    playSaveClickSound();
+    closeThemeModal();
+});
+themeBackdrop.addEventListener("click", closeThemeModal);
+closeSettingsButton.addEventListener("click", () => {
+    playSaveClickSound();
+    closeSettingsModal();
+});
+settingsBackdrop.addEventListener("click", closeSettingsModal);
 
 cancelSaveButton.addEventListener("click", closeSaveModalWithSound);
 confirmSaveButton.addEventListener("click", saveCurrentCount);
@@ -554,6 +650,18 @@ document.addEventListener("keydown", (event) => {
 
     if (activeModal === savedEntriesModal) {
         closeSavedEntriesModal();
+    }
+
+    if (activeModal === menuModal) {
+        closeMenuModal();
+    }
+
+    if (activeModal === themeModal) {
+        closeThemeModal();
+    }
+
+    if (activeModal === settingsModal) {
+        closeSettingsModal();
     }
 
     if (activeModal === confirmResetModal) {
@@ -612,3 +720,4 @@ resetSetButton.addEventListener("click", () => {
 renderCount();
 renderSetCount();
 renderSavedCounts();
+renderTheme();
