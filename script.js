@@ -9,7 +9,6 @@ const resetButton = document.getElementById("resetButton");
 const resetSetButton = document.getElementById("resetSetButton");
 const savedEntriesButton = document.getElementById("savedEntriesButton");
 const savedListElement = document.getElementById("savedList");
-const savedCountElement = document.getElementById("savedCount");
 
 const saveModal = document.getElementById("saveModal");
 const modalBackdrop = document.getElementById("modalBackdrop");
@@ -31,8 +30,9 @@ const settingsButton = document.getElementById("settingsButton");
 const closeMenuButton = document.getElementById("closeMenuButton");
 const themeModal = document.getElementById("themeModal");
 const themeBackdrop = document.getElementById("themeBackdrop");
-const themeMilkYarnButton = document.getElementById("themeMilkYarnButton");
-const themePaperButton = document.getElementById("themePaperButton");
+const themeCafeLatteButton = document.getElementById("themeCafeLatteButton");
+const themeMilkButton = document.getElementById("themeMilkButton");
+const themeMochiDropButton = document.getElementById("themeMochiDropButton");
 const closeThemeButton = document.getElementById("closeThemeButton");
 const settingsModal = document.getElementById("settingsModal");
 const settingsBackdrop = document.getElementById("settingsBackdrop");
@@ -56,7 +56,8 @@ let pendingResetType = null;
 let count = Number.parseInt(localStorage.getItem(STORAGE_KEY) ?? "0", 10);
 let setCount = Number.parseInt(localStorage.getItem(SET_STORAGE_KEY) ?? "1", 10);
 let savedCounts = readSavedCounts();
-let currentTheme = localStorage.getItem(THEME_STORAGE_KEY) === "clean" ? "clean" : "classic";
+const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+let currentTheme = ["classic", "clean", "mochi"].includes(savedTheme) ? savedTheme : "classic";
 
 if (Number.isNaN(count) || count < 0) {
     count = 0;
@@ -123,7 +124,7 @@ function renderCount() {
 }
 
 function renderSetCount() {
-    setCountElement.innerHTML = `${setCount}<span class="set-counter-suffix"> セ ッ ト 目</span>`;
+    setCountElement.textContent = String(setCount);
     localStorage.setItem(SET_STORAGE_KEY, String(setCount));
     animateCounter(setCountElement);
 }
@@ -153,8 +154,6 @@ function escapeHtml(value) {
 }
 
 function renderSavedCounts() {
-    savedCountElement.textContent = `${savedCounts.length}件`;
-
     if (savedCounts.length === 0) {
         savedListElement.innerHTML = '<p class="saved-empty">まだ保存された段数はありません。</p>';
         return;
@@ -180,7 +179,13 @@ function renderSavedCounts() {
                     data-id="${item.id}"
                     aria-label="${escapeHtml(item.name)} を削除"
                 >
-                    ×
+                    <svg class="saved-delete-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M3 6h18" />
+                        <path d="M8 6V4h8v2" />
+                        <path d="M6 6l1 15h10l1-15" />
+                        <path d="M10 10v7" />
+                        <path d="M14 10v7" />
+                    </svg>
                 </button>
             </div>
         </article>
@@ -189,9 +194,11 @@ function renderSavedCounts() {
 
 function renderTheme() {
     document.body.classList.toggle("theme-clean", currentTheme === "clean");
+    document.body.classList.toggle("theme-mochi", currentTheme === "mochi");
     themeToggleButton.textContent = "テーマ変更";
-    themeMilkYarnButton.setAttribute("aria-pressed", String(currentTheme === "classic"));
-    themePaperButton.setAttribute("aria-pressed", String(currentTheme === "clean"));
+    themeCafeLatteButton.setAttribute("aria-pressed", String(currentTheme === "classic"));
+    themeMilkButton.setAttribute("aria-pressed", String(currentTheme === "clean"));
+    themeMochiDropButton.setAttribute("aria-pressed", String(currentTheme === "mochi"));
     localStorage.setItem(THEME_STORAGE_KEY, currentTheme);
 }
 
@@ -265,7 +272,13 @@ function closeMenuModal() {
 
 function openThemeModal() {
     renderTheme();
-    openModal(themeModal, currentTheme === "clean" ? themePaperButton : themeMilkYarnButton);
+    const focusElement = currentTheme === "clean"
+        ? themeMilkButton
+        : currentTheme === "mochi"
+            ? themeMochiDropButton
+            : themeCafeLatteButton;
+
+    openModal(themeModal, focusElement);
 }
 
 function closeThemeModal() {
@@ -398,6 +411,11 @@ function getAudioContext() {
 }
 
 function playPokoSound(pitch = "up") {
+    if (currentTheme === "mochi") {
+        playMochiSound(pitch);
+        return;
+    }
+
     const context = getAudioContext();
 
     if (!context) {
@@ -440,6 +458,48 @@ function playPokoSound(pitch = "up") {
     overtone.start(now);
     oscillator.stop(now + 0.2);
     overtone.stop(now + 0.2);
+}
+
+function playMochiSound(pitch = "up") {
+    const context = getAudioContext();
+
+    if (!context) {
+        return;
+    }
+
+    const now = context.currentTime;
+    const oscillator = context.createOscillator();
+    const wobble = context.createOscillator();
+    const gainNode = context.createGain();
+    const filter = context.createBiquadFilter();
+    const isLowerPitch = pitch === "down";
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(isLowerPitch ? 210 : 250, now);
+    oscillator.frequency.exponentialRampToValueAtTime(isLowerPitch ? 145 : 175, now + 0.18);
+
+    wobble.type = "triangle";
+    wobble.frequency.setValueAtTime(isLowerPitch ? 155 : 190, now);
+    wobble.frequency.exponentialRampToValueAtTime(isLowerPitch ? 118 : 136, now + 0.22);
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(760, now);
+    filter.Q.setValueAtTime(0.8, now);
+
+    gainNode.gain.setValueAtTime(0.0001, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.13, now + 0.018);
+    gainNode.gain.exponentialRampToValueAtTime(0.06, now + 0.11);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+
+    oscillator.connect(filter);
+    wobble.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    oscillator.start(now);
+    wobble.start(now + 0.025);
+    oscillator.stop(now + 0.28);
+    wobble.stop(now + 0.25);
 }
 
 function playResetSound() {
@@ -583,12 +643,16 @@ themeToggleButton.addEventListener("click", () => {
     openThemeModal();
 });
 
-themeMilkYarnButton.addEventListener("click", () => {
+themeCafeLatteButton.addEventListener("click", () => {
     selectTheme("classic");
 });
 
-themePaperButton.addEventListener("click", () => {
+themeMilkButton.addEventListener("click", () => {
     selectTheme("clean");
+});
+
+themeMochiDropButton.addEventListener("click", () => {
+    selectTheme("mochi");
 });
 
 settingsButton.addEventListener("click", () => {
