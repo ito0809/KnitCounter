@@ -1,1069 +1,221 @@
-:root {
-    --white: #fffdf9;
-    --beige-50: #faf5ee;
-    --beige-100: #f2e8db;
-    --beige-200: #e6d6c3;
-    --beige-400: #b59674;
-    --beige-700: #6d5440;
-    --sage-100: #eef3e7;
-    --sage-200: #dce8d1;
-    --sage-300: #c9d9bc;
-    --text: #473729;
-    --shadow: rgba(109, 84, 64, 0.14);
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
-    color: var(--text);
-    background-color: var(--beige-50);
-    overflow-x: hidden;
-    -webkit-text-size-adjust: 100%;
-}
-
-body.theme-clean {
-    --white: #ffffff;
-    --beige-50: #f8f8f6;
-    --beige-100: #efefeb;
-    --beige-200: #deded8;
-    --beige-400: #7A6657;
-    --beige-700: #7A6657;
-    --sage-100: #f5f5f2;
-    --sage-200: #e9e9e4;
-    --sage-300: #d8d8d0;
-    --text: #7A6657;
-    --shadow: rgba(55, 55, 51, 0.12);
-}
-
-.app-background {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    background-color: var(--beige-50);
-    background-image: url("./img/001.png");
-    background-size: 320px 320px;
-    background-repeat: repeat;
-    background-position: center top;
-    opacity: 0.3;
-    pointer-events: none;
-}
-
-body.theme-clean .app-background {
-    background-image: url("./img/white.png");
-    opacity: 0.55;
-}
-
-.counter-app {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    padding: 24px;
-}
-
-.counter-card,
-.center-card {
-    position: relative;
-    width: min(100%, 420px);
-    padding: 36px 28px 50px;
-    border-radius: 28px;
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid rgba(181, 150, 116, 0.16);
-    box-shadow:
-        0 18px 40px rgba(109, 84, 64, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(2px);
-    text-align: center;
-}
-
-body.theme-clean .counter-card {
-    background: rgba(255, 255, 252, 0.97);
-    border-color: rgba(78, 78, 72, 0.1);
-    box-shadow:
-        0 18px 40px rgba(55, 55, 51, 0.09),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-.policy-card {
-    width: min(100%, 420px);
-    padding: 34px 24px 32px;
-    text-align: left;
-}
-
-.app-footer-links {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-.footer-link {
-    color: rgba(71, 55, 41, 0.76);
-    font-size: 0.88rem;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(109, 84, 64, 0.22);
-    padding-bottom: 2px;
-}
-
-.footer-link:hover,
-.footer-link:focus-visible {
-    color: var(--beige-700);
-    border-bottom-color: rgba(109, 84, 64, 0.42);
-}
-
-.footer-link:focus-visible {
-    outline: 3px solid rgba(181, 150, 116, 0.24);
-    outline-offset: 6px;
-    border-radius: 4px;
-}
-
-.policy-back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 18px;
-    color: rgba(71, 55, 41, 0.72);
-    font-size: 0.85rem;
-    text-decoration: none;
-}
-
-.policy-back-link:hover,
-.policy-back-link:focus-visible {
-    color: var(--beige-700);
-}
-
-.policy-card h1 {
-    margin: 0 0 22px;
-    font-size: clamp(1.45rem, 3.6vw, 1.95rem);
-    text-align: left;
-}
-
-.policy-section {
-    padding: 16px 0;
-    border-top: 1px solid rgba(181, 150, 116, 0.2);
-}
-
-.policy-section:first-of-type {
-    padding-top: 0;
-    border-top: none;
-}
-
-.policy-section:last-of-type {
-    padding-bottom: 0;
-}
-
-.policy-section h2 {
-    margin: 0 0 10px;
-    font-size: 0.98rem;
-    line-height: 1.5;
-    color: var(--beige-700);
-}
-
-.policy-section p {
-    margin: 0;
-    font-size: 0.94rem;
-    line-height: 1.85;
-    color: rgba(71, 55, 41, 0.84);
-}
-
-.policy-section p + p {
-    margin-top: 10px;
-}
-
-h1 {
-    margin: 20px 0 30px 0;
-    font-size: clamp(1.8rem, 4vw, 2.4rem);
-    line-height: 1.2;
-    color: var(--beige-700);
-    text-shadow: 0 3px 18px rgba(181, 150, 116, 0.48);
-}
-
-.description {
-    margin: 12px 0 28px;
-    color: rgba(71, 55, 41, 0.72);
-    line-height: 1.6;
-}
-.count-display {
-    position: relative;
-    border-radius: 28px;
-    background: linear-gradient(180deg, var(--sage-100) 0%, var(--sage-200) 100%);
-    box-shadow:
-        0 10px 22px rgba(109, 84, 64, 0.08),
-        inset 0 2px 3px rgba(255, 255, 255, 0.5),
-        inset 0 -3px 6px rgba(109, 84, 64, 0.08);
-}
-.count-display::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 28px;
-    padding: 8px;
-    background:
-        repeating-linear-gradient(
-            45deg,
-            var(--sage-300) 0 10px,
-            #f7fbf3 10px 20px
-        );
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.5),
-        inset 0 -2px 4px rgba(109, 84, 64, 0.12);
-    pointer-events: none;
-}
-.count-surface {
-    position: relative;
-    z-index: 1;
-    padding: 24px 20px 56px;
-    border-radius: 20px;
-    background: linear-gradient(180deg, #fffdfa 0%, var(--beige-50) 100%);
-    box-shadow:
-        0 10px 22px rgba(109, 84, 64, 0.10),
-        inset 0 -8px 16px rgba(109, 84, 64, 0.03),
-        inset 0 1px 0 rgba(255, 255, 255, 0.78);
-}
-
-body.theme-clean .count-display {
-    background: linear-gradient(180deg, #f5f5f2 0%, #e9e9e4 100%);
-    box-shadow:
-        0 10px 22px rgba(55, 55, 51, 0.07),
-        inset 0 2px 3px rgba(255, 255, 255, 0.58),
-        inset 0 -3px 6px rgba(55, 55, 51, 0.06);
-}
-
-body.theme-clean .count-display::before {
-    background:
-        repeating-linear-gradient(
-            45deg,
-            #d8d8d0 0 10px,
-            #fafaf7 10px 20px
-        );
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.62),
-        inset 0 -2px 4px rgba(55, 55, 51, 0.08);
-}
-
-body.theme-clean .count-surface {
-    background: #FAF8F5;
-    box-shadow:
-        0 10px 22px rgba(55, 55, 51, 0.08),
-        inset 0 -8px 16px rgba(55, 55, 51, 0.025),
-        inset 0 1px 0 rgba(255, 255, 255, 0.84);
-}
-
-.count-label {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--beige-400);
-    letter-spacing: 0.03em;
-}
-
-.count-value {
-    display: block;
-    margin-top: 16px;
-    font-size: clamp(3.6rem, 14vw, 5.5rem);
-    font-weight: 700;
-    color: var(--beige-700);
-    line-height: 1;
-    text-shadow: 0 3px 0 rgba(255, 255, 255, 0.35);
-}
-
-.count-value.bump {
-    animation: count-bump 0.22s ease;
-}
-
-.button-group {
-    display: grid;
-    gap: 18px;
-    margin-top: 24px;
-}
-
-.button-section {
-    display: grid;
-    gap: 10px;
-}
-
-.button-section-label {
-    margin: 0;
-    font-size: 0.84rem;
-    font-weight: 700;
-    color: var(--beige-700);
-    text-align: left;
-}
-
-.button-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-
-.count-button,
-.mini-count-button,
-.card-reset-button,
-.save-button,
-.modal-button {
-    border: none;
-    cursor: pointer;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
-    font: inherit;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.count-button {
-    min-height: 76px;
-    border-radius: 20px;
-    font-size: 2.2rem;
-    font-weight: 700;
-    box-shadow:
-        0 12px 24px rgba(109, 84, 64, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-.mini-count-button {
-    width: 36px;
-    height: 36px;
-    border-radius: 999px;
-    font-size: 1.35rem;
-    font-weight: 700;
-    line-height: 1;
-    display: grid;
-    place-items: center;
-    box-shadow:
-        0 10px 18px rgba(109, 84, 64, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-.count-button.primary,
-.mini-count-button.primary {
-    background: linear-gradient(180deg, #c9aa88 0%, #b59674 100%);
-    color: #fffdfa;
-    box-shadow:
-        0 14px 28px rgba(109, 84, 64, 0.16),
-        0 4px 10px rgba(181, 150, 116, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-.count-button.secondary,
-.mini-count-button.secondary {
-    background: linear-gradient(180deg, #c9aa88 0%, #b59674 100%);
-    color: #fffdfa;
-    box-shadow:
-        0 14px 28px rgba(109, 84, 64, 0.16),
-        0 4px 10px rgba(181, 150, 116, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-body.theme-clean .count-button.primary,
-body.theme-clean .count-button.secondary,
-body.theme-clean .mini-count-button.primary,
-body.theme-clean .mini-count-button.secondary {
-    background: linear-gradient(180deg, #ffffff 0%, #e8e8e3 100%);
-    color: #7A6657;
-    box-shadow:
-        0 12px 24px rgba(55, 55, 51, 0.09),
-        0 4px 10px rgba(78, 78, 72, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-body.theme-clean .count-button.primary,
-body.theme-clean .count-button.secondary {
-    border: 1px solid rgba(78, 78, 72, 0.055);
-    border-top-color: rgba(78, 78, 72, 0.025);
-    box-shadow:
-        0 12px 24px rgba(55, 55, 51, 0.085),
-        0 4px 10px rgba(78, 78, 72, 0.07),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-body.theme-clean .mini-count-button.primary,
-body.theme-clean .mini-count-button.secondary {
-    border: 1px solid rgba(78, 78, 72, 0.12);
-    box-shadow:
-        0 5px 10px rgba(55, 55, 51, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-body.theme-clean .saved-entries-button,
-body.theme-clean .save-button,
-body.theme-clean .modal-button.secondary,
-body.theme-clean .menu-item-button,
-body.theme-clean .theme-option-button {
-    background: linear-gradient(180deg, #ffffff 0%, #eeeeea 100%);
-    color: #7A6657;
-    box-shadow:
-        0 10px 20px rgba(55, 55, 51, 0.09),
-        inset 0 1px 0 rgba(255, 255, 255, 0.76);
-}
-
-body.theme-clean .save-button {
-    box-shadow:
-        0 14px 26px rgba(55, 55, 51, 0.12),
-        0 4px 10px rgba(78, 78, 72, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.82);
-}
-
-body.theme-clean .menu-modal-card .menu-item-button,
-body.theme-clean .menu-modal-card .modal-button.secondary {
-    box-shadow:
-        0 12px 22px rgba(55, 55, 51, 0.11),
-        0 3px 8px rgba(78, 78, 72, 0.07),
-        inset 0 1px 0 rgba(255, 255, 255, 0.82);
-}
-
-body.theme-clean .card-reset-button,
-body.theme-clean .modal-close-button,
-body.theme-clean .saved-delete-button {
-    background: rgba(78, 78, 72, 0.11);
-    color: #7A6657;
-}
-
-.set-counter-card {
-    position: relative;
-    display: grid;
-    justify-items: center;
-    gap: 8px;
-    margin-top: 24px;
-    padding: 18px 12px 16px;
-    border-radius: 18px;
-    background: linear-gradient(180deg, #fff7ee 0%, #f3e5d4 100%);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.7),
-        0 8px 16px rgba(109, 84, 64, 0.08);
-}
-
-.set-counter-prefix {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: rgba(109, 84, 64, 0.72);
-    letter-spacing: 0.03em;
-}
-
-.set-counter-label {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--beige-700);
-}
-
-.set-counter-controls {
-    position: relative;
-    display: grid;
-    align-items: center;
-    width: 100%;
-    justify-items: center;
-    margin-top: 6px;
-}
-
-.set-counter-stepper {
-    display: inline-flex;
-    align-items: center;
-    gap: 30px;
-    justify-content: center;
-}
-
-.set-counter-value {
-    min-width: 1.8em;
-    text-align: center;
-    font-size: 2.15rem;
-    font-weight: 700;
-    line-height: 1;
-    color: #8b6a4b;
-}
-
-.set-counter-suffix {
-    margin-left: 0.16em;
-    font-size: 0.34em;
-    font-weight: 400;
-    color: var(--beige-400);
-    letter-spacing: 0.03em;
-}
-
-.card-reset-button {
-    min-width: 38px;
-    height: 38px;
-    padding: 0;
-    border-radius: 999px;
-    background: linear-gradient(180deg, #efe5d6 0%, #e3d1bb 100%);
-    color: #8a5a3c;
-    font-size: 1.1rem;
-    font-weight: 700;
-    display: grid;
-    place-items: center;
-    box-shadow:
-        0 8px 18px rgba(109, 84, 64, 0.1),
-        0 3px 8px rgba(181, 150, 116, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.42);
-}
-
-.set-reset-button {
-    position: absolute;
-    right: 8px;
-    margin-left: auto;
-    background: linear-gradient(180deg, #e7d3be 0%, #d7b798 100%);
-    color: #7a4d2f;
-}
-
-body.theme-clean .set-counter-card {
-    border: 1px solid rgba(78, 78, 72, 0.045);
-    background: #FAF8F5;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.82),
-        0 8px 18px rgba(55, 55, 51, 0.055);
-}
-
-body.theme-clean .set-counter-value {
-    color: #7A6657;
-}
-
-body.theme-clean .set-counter-suffix {
-    color: #7A6657;
-}
-
-body.theme-clean .set-reset-button {
-    background: linear-gradient(180deg, #eeeeea 0%, #d9d9d3 100%);
-    color: #7A6657;
-}
-
-.count-surface > .card-reset-button {
-    position: absolute;
-    right: 18px;
-    bottom: 18px;
-}
-
-.save-button {
-    margin-top: 25px;
-    width: 100%;
-    padding: 14px 18px;
-    border-radius: 999px;
-    background: linear-gradient(180deg, #fff9f0 0%, #f3e7d7 100%);
-    color: var(--beige-700);
-    font-weight: 700;
-    box-shadow:
-        0 12px 24px rgba(109, 84, 64, 0.12),
-        0 3px 8px rgba(181, 150, 116, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.62);
-}
-
-.saved-entries-button {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    display: grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
-    border: none;
-    border-radius: 999px;
-    background: linear-gradient(180deg, #fff9f0 0%, #f0e0ca 100%);
-    color: var(--beige-700);
-    font: inherit;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow:
-        0 12px 22px rgba(109, 84, 64, 0.14),
-        0 3px 8px rgba(181, 150, 116, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.72);
-    transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.saved-entries-icon {
-    display: grid;
-    gap: 5px;
-    width: 18px;
-}
-
-.saved-entries-icon span {
-    display: block;
-    height: 1px;
-    border-radius: 999px;
-    background: rgba(109, 84, 64, 0.62);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.34);
-}
-
-.saved-entries-icon span:nth-child(1) {
-    width: 100%;
-}
-
-.saved-entries-icon span:nth-child(2) {
-    width: 72%;
-}
-
-.saved-entries-icon span:nth-child(3) {
-    width: 88%;
-}
-
-.count-button:hover,
-.mini-count-button:hover,
-.card-reset-button:hover,
-.save-button:hover,
-.modal-button:hover,
-.saved-entries-button:hover,
-.menu-item-button:hover,
-.theme-option-button:hover,
-.modal-close-button:hover {
-    transform: translateY(-2px);
-}
-
-.count-button:active,
-.mini-count-button:active,
-.card-reset-button:active,
-.save-button:active,
-.modal-button:active,
-.saved-entries-button:active,
-.menu-item-button:active,
-.theme-option-button:active,
-.modal-close-button:active {
-    transform: translateY(0);
-}
-
-.count-button:focus-visible,
-.mini-count-button:focus-visible,
-.card-reset-button:focus-visible,
-.save-button:focus-visible,
-.modal-button:focus-visible,
-.saved-entries-button:focus-visible,
-.saved-item-button:focus-visible,
-.saved-delete-button:focus-visible,
-.menu-item-button:focus-visible,
-.theme-option-button:focus-visible,
-.modal-close-button:focus-visible,
-.modal-input:focus-visible {
-    outline: 3px solid rgba(181, 150, 116, 0.32);
-    outline-offset: 3px;
-}
-
-.saved-count {
-    display: inline-flex;
-    align-items: center;
-    min-height: 30px;
-    padding: 0 12px;
-    border-radius: 999px;
-    background: rgba(181, 150, 116, 0.12);
-    color: var(--beige-700);
-    font-size: 0.88rem;
-}
-
-.saved-modal-card {
-    width: min(100%, 420px);
-    max-height: min(80vh, 620px);
-    overflow: auto;
-}
-
-.menu-modal-card {
-    width: min(100%, 360px);
-    padding-top: 34px;
-}
-
-.theme-modal-card {
-    width: min(100%, 360px);
-    padding-top: 34px;
-}
-
-.modal-close-button {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    display: grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 999px;
-    background: rgba(181, 150, 116, 0.14);
-    color: var(--beige-700);
-    font: inherit;
-    font-size: 1.35rem;
-    line-height: 1;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    transition: transform 0.16s ease, background-color 0.16s ease;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.menu-list {
-    display: grid;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.menu-item-button {
-    min-height: 54px;
-    padding: 0 18px;
-    border: none;
-    border-radius: 18px;
-    background: linear-gradient(180deg, #fffdfa 0%, #f4eadf 100%);
-    color: var(--beige-700);
-    font: inherit;
-    font-weight: 700;
-    text-align: center;
-    cursor: pointer;
-    box-shadow:
-        0 10px 20px rgba(109, 84, 64, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.75);
-    transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.menu-actions {
-    display: grid;
-    gap: 12px;
-    margin-top: 16px;
-}
-
-.theme-options {
-    display: grid;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.theme-option-button {
-    position: relative;
-    min-height: 54px;
-    padding: 0 18px;
-    border: none;
-    border-radius: 18px;
-    background: linear-gradient(180deg, #fffdfa 0%, #f4eadf 100%);
-    color: var(--beige-700);
-    font: inherit;
-    font-weight: 700;
-    text-align: center;
-    cursor: pointer;
-    box-shadow:
-        0 10px 20px rgba(109, 84, 64, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.75);
-    transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.theme-option-button::after {
-    content: "";
-    position: absolute;
-    right: 18px;
-    color: inherit;
-    font-size: 1.08rem;
-    line-height: 1;
-}
-
-.theme-option-button[aria-pressed="true"] {
-    background: linear-gradient(180deg, #c9aa88 0%, #b59674 100%);
-    color: #fffdfa;
-    box-shadow:
-        0 12px 24px rgba(109, 84, 64, 0.16),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-
-.theme-option-button[aria-pressed="true"]::after {
-    content: "✓";
-}
-
-.saved-modal-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.saved-list {
-    display: grid;
-    gap: 12px;
-}
-
-.saved-empty {
-    margin: 0;
-    padding: 16px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.7);
-    color: rgba(71, 55, 41, 0.7);
-    text-align: center;
-}
-
-.saved-item {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 10px;
-    align-items: center;
-    padding: 12px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.82);
-    box-shadow:
-        0 8px 18px rgba(109, 84, 64, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.72);
-}
-
-.saved-item-button {
-    display: grid;
-    gap: 4px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    text-align: left;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.saved-item-name {
-    font-weight: 700;
-    color: var(--beige-700);
-}
-
-.saved-item-meta {
-    font-size: 0.88rem;
-    color: rgba(71, 55, 41, 0.72);
-}
-
-.saved-item-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.saved-delete-button {
-    min-width: 42px;
-    min-height: 42px;
-    border: none;
-    border-radius: 999px;
-    background: rgba(181, 150, 116, 0.14);
-    color: var(--beige-700);
-    font: inherit;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.modal[hidden] {
-    display: none;
-}
-
-.modal {
-    position: fixed;
-    inset: 0;
-    z-index: 20;
-    display: grid;
-    place-items: center;
-    padding: 24px;
-}
-
-.modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(71, 55, 41, 0.32);
-    backdrop-filter: blur(3px);
-}
-
-.modal-card {
-    position: relative;
-    z-index: 1;
-    width: min(100%, 360px);
-    padding: 28px 22px 22px;
-    border-radius: 28px;
-    background: rgba(255, 253, 249, 0.98);
-    box-shadow:
-        0 24px 48px rgba(109, 84, 64, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.84);
-}
-
-.modal-card h2 {
-    margin: 0;
-    font-size: 1.4rem;
-    color: var(--beige-700);
-}
-
-.modal-description {
-    margin: 10px 0 18px;
-    color: rgba(71, 55, 41, 0.72);
-    line-height: 1.5;
-}
-
-.modal-count-box {
-    display: grid;
-    gap: 6px;
-    padding: 16px;
-    border-radius: 20px;
-    background: linear-gradient(180deg, #fffdfa 0%, #f4eadf 100%);
-    box-shadow:
-        0 10px 20px rgba(109, 84, 64, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.75);
-}
-
-.modal-count-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 18px;
-}
-
-.modal-count-label {
-    font-size: 0.82rem;
-    color: var(--beige-400);
-}
-
-.modal-count-value {
-    font-size: 2.6rem;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--beige-700);
-}
-
-.modal-set-count-value {
-    color: #8b6a4b;
-}
-
-.modal-label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 0.92rem;
-    color: var(--beige-700);
-}
-
-.modal-input {
-    width: 100%;
-    padding: 14px 16px;
-    border: 1px solid rgba(181, 150, 116, 0.28);
-    border-radius: 16px;
-    background: #fffdfa;
-    color: var(--text);
-    font: inherit;
-    box-shadow: inset 0 1px 2px rgba(109, 84, 64, 0.05);
-}
-
-.modal-error {
-    margin: 10px 0 0;
-    color: #a5563b;
-    font-size: 0.88rem;
-}
-
-.modal-actions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.modal-actions.single-action {
-    grid-template-columns: 1fr;
-}
-
-.modal-button {
-    min-height: 50px;
-    border-radius: 18px;
-    font-weight: 700;
-}
-
-.modal-button.primary {
-    background: linear-gradient(180deg, #c9aa88 0%, #b59674 100%);
-    color: #fffdfa;
-    box-shadow:
-        0 12px 24px rgba(109, 84, 64, 0.16),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-
-.modal-button.secondary {
-    background: linear-gradient(180deg, #fbf3e8 0%, #efe2d1 100%);
-    color: var(--beige-700);
-    box-shadow:
-        0 10px 18px rgba(109, 84, 64, 0.10),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-body.theme-clean .modal-button.primary,
-body.theme-clean .theme-option-button[aria-pressed="true"] {
-    background: linear-gradient(180deg, #dddeda 0%, #c3c4be 100%);
-    color: #7A6657;
-    box-shadow:
-        0 12px 24px rgba(55, 55, 51, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.58);
-}
-
-body.theme-clean .modal-button.secondary {
-    background: linear-gradient(180deg, #ffffff 0%, #eeeeea 100%);
-    color: #7A6657;
-    box-shadow:
-        0 10px 18px rgba(55, 55, 51, 0.09),
-        inset 0 1px 0 rgba(255, 255, 255, 0.76);
-}
-
-@keyframes count-bump {
-    0% {
-        transform: scale(1);
-    }
-
-    45% {
-        transform: scale(1.09);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-@media (max-width: 480px) {
-    .counter-card {
-        padding: 28px 20px;
-        border-radius: 24px;
-    }
-
-    .saved-entries-button {
-        top: 14px;
-        right: 14px;
-    }
-
-    .button-row {
-        gap: 12px;
-    }
-
-    .set-counter-card {
-        gap: 10px;
-        padding: 18px 10px 14px;
-    }
-
-    .set-counter-prefix {
-        font-size: 0.68rem;
-    }
-
-    .set-counter-label {
-        font-size: 0.76rem;
-    }
-
-    .set-counter-controls {
-        gap: 8px;
-    }
-
-    .modal-count-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .saved-item {
-        grid-template-columns: 1fr;
-    }
-
-    .saved-item-actions {
-        justify-content: flex-end;
-    }
-
-    .modal-actions {
-        grid-template-columns: 1fr;
-    }
-
-    .count-button {
-        min-height: 68px;
-    }
-}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#faf5ee">
+    <meta name="apple-mobile-web-app-title" content="Knit Counter">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Knit Counter</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico?v=20260420-5">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico?v=20260420-5">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png?v=20260420-5">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png?v=20260420-5">
+    <link rel="icon" type="image/png" href="img/favicon.png?v=20260420-5">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png?v=20260420-5">
+    <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-precomposed.png?v=20260420-5">
+    <link rel="manifest" href="manifest.webmanifest?v=20260420-5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400..700&amp;family=M+PLUS+Rounded+1c:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=20260420-55">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3495067315545734"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div class="app-background" aria-hidden="true"></div>
+<main class="counter-app">
+    <section class="counter-card" aria-labelledby="app-title">
+        <button id="savedEntriesButton" class="saved-entries-button" type="button" aria-label="保存した段数を見る">
+            <span class="saved-entries-icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        </button>
+        <h1 id="app-title">Knit Counter</h1>
+        <!--<p class="description">＋ボタンで段数を増やし、－ボタンで減らせます。</p> -->
+
+        <div class="count-display" aria-live="polite" aria-atomic="true">
+            <div class="count-surface">
+                <span class="count-label">現 在 の 段 数</span>
+                <span id="count" class="count-value">0</span>
+                <button id="resetButton" class="card-reset-button" type="button" aria-label="段数をリセットする">↺</button>
+            </div>
+        </div>
+
+        <div class="set-counter-card">
+            <div class="set-counter-readout" aria-live="polite" aria-atomic="true">
+                <span id="setCount" class="set-counter-value">0</span>
+                <span class="set-counter-suffix"> セ ッ ト 目</span>
+            </div>
+            <div class="set-counter-controls">
+                <div class="set-counter-stepper">
+                    <button id="decreaseSetButton" class="mini-count-button secondary" type="button" aria-label="セット数を1つ減らす">−</button>
+                    <button id="increaseSetButton" class="mini-count-button primary" type="button" aria-label="セット数を1つ増やす">＋</button>
+                </div>
+                <button id="resetSetButton" class="card-reset-button set-reset-button" type="button" aria-label="セット数をリセットする">↺</button>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <div class="button-section">
+<!--                <p class="button-section-label">段数</p>-->
+                <div class="button-row">
+                    <button id="decreaseButton" class="count-button secondary" type="button" aria-label="段数を1つ減らす">−</button>
+                    <button id="increaseButton" class="count-button primary" type="button" aria-label="段数を1つ増やす">＋</button>
+                </div>
+            </div>
+        </div>
+
+        <button id="saveButton" class="save-button" type="button">記 録 す る</button>
+    </section>
+
+
+    <nav class="app-footer-links" aria-label="フッターリンク">
+        <a class="footer-link" href="privacy.html">プライバシーポリシー</a>
+    </nav>
+</main>
+
+<div id="saveModal" class="modal" hidden>
+    <div id="modalBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="saveModalTitle"
+        aria-describedby="saveModalDescription"
+    >
+        <h2 id="saveModalTitle">記 録 す る</h2>
+        <p id="saveModalDescription" class="modal-description">名前をつけて記録できます。</p>
+
+        <div class="modal-count-grid">
+            <div class="modal-count-box">
+                <span class="modal-count-label">現在の段数</span>
+                <span id="modalCurrentCount" class="modal-count-value">0</span>
+            </div>
+
+            <div class="modal-count-box">
+                <span class="modal-count-label">現在のセット数</span>
+                <span id="modalCurrentSetCount" class="modal-count-value modal-set-count-value">0</span>
+            </div>
+        </div>
+
+        <label class="modal-label" for="saveNameInput">保存名</label>
+        <input
+            id="saveNameInput"
+            class="modal-input"
+            type="text"
+            maxlength="40"
+            placeholder="例: 身頃 "
+        >
+
+        <p id="saveError" class="modal-error" hidden>名前を入力してください。</p>
+
+        <div class="modal-actions">
+            <button id="cancelSaveButton" class="modal-button secondary" type="button">キャンセル</button>
+            <button id="confirmSaveButton" class="modal-button primary" type="button">保存する</button>
+        </div>
+    </section>
+</div>
+
+<div id="savedEntriesModal" class="modal" hidden>
+    <div id="savedEntriesBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card saved-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="savedEntriesTitle"
+    >
+        <button id="closeSavedEntriesButton" class="modal-close-button" type="button" aria-label="保存した記録を閉じる">×</button>
+        <div class="saved-modal-header">
+            <div>
+                <h2 id="savedEntriesTitle">これまでの記録</h2>
+
+            </div>
+        </div>
+
+        <div id="savedList" class="saved-list" aria-live="polite"></div>
+    </section>
+</div>
+
+<div id="menuModal" class="modal" hidden>
+    <div id="menuBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card menu-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="menuTitle"
+    >
+        <button id="closeMenuButton" class="modal-close-button" type="button" aria-label="メニューを閉じる">×</button>
+        <h2 id="menuTitle">menu</h2>
+
+        <div class="menu-list">
+            <button id="menuSavedButton" class="menu-item-button" type="button">保存した記録</button>
+        </div>
+
+        <div class="menu-actions">
+            <button id="themeToggleButton" class="modal-button secondary" type="button">テーマ変更</button>
+            <button id="settingsButton" class="modal-button secondary" type="button">設定</button>
+        </div>
+    </section>
+</div>
+
+<div id="themeModal" class="modal" hidden>
+    <div id="themeBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card theme-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="themeTitle"
+    >
+        <button id="closeThemeButton" class="modal-close-button" type="button" aria-label="テーマ選択を閉じる">×</button>
+        <h2 id="themeTitle">テーマ変更</h2>
+
+        <div class="theme-options">
+            <button id="themeCafeLatteButton" class="theme-option-button" type="button">Cafe Latte</button>
+            <button id="themeMilkButton" class="theme-option-button" type="button">Milk</button>
+            <button id="themeMochiDropButton" class="theme-option-button" type="button">Mochi Drop</button>
+        </div>
+    </section>
+</div>
+
+<div id="settingsModal" class="modal" hidden>
+    <div id="settingsBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card settings-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settingsTitle"
+    >
+        <h2 id="settingsTitle">設定</h2>
+        <p class="modal-description">現在、変更できる設定はありません。</p>
+        <div class="modal-actions single-action">
+            <button id="closeSettingsButton" class="modal-button secondary" type="button">閉じる</button>
+        </div>
+    </section>
+</div>
+
+<div id="confirmResetModal" class="modal" hidden>
+    <div id="confirmResetBackdrop" class="modal-backdrop"></div>
+    <section
+        class="modal-card confirm-reset-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmResetTitle"
+        aria-describedby="confirmResetDescription"
+    >
+        <h2 id="confirmResetTitle">リセットの確認</h2>
+        <p id="confirmResetDescription" class="modal-description">この値を0に戻します。よろしいですか？</p>
+        <div class="modal-actions">
+            <button id="cancelResetButton" class="modal-button secondary" type="button">キャンセル</button>
+            <button id="confirmResetButton" class="modal-button primary" type="button">リセット</button>
+        </div>
+    </section>
+</div>
+
+<script src="script.js?v=20260420-12"></script>
+</body>
+</html>
