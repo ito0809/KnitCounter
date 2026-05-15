@@ -16,7 +16,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png?v=20260420-5">
     <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-precomposed.png?v=20260420-5">
     <link rel="manifest" href="manifest.webmanifest?v=20260420-5">
-    <link rel="stylesheet" href="styles.css?v=20260420-19">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400..700&amp;family=M+PLUS+Rounded+1c:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=20260420-55">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3495067315545734"
             crossorigin="anonymous"></script>
 
@@ -44,7 +47,10 @@
         </div>
 
         <div class="set-counter-card">
-            <span id="setCount" class="set-counter-value">0</span>
+            <div class="set-counter-readout" aria-live="polite" aria-atomic="true">
+                <span id="setCount" class="set-counter-value">0</span>
+                <span class="set-counter-suffix"> セ ッ ト 目</span>
+            </div>
             <div class="set-counter-controls">
                 <div class="set-counter-stepper">
                     <button id="decreaseSetButton" class="mini-count-button secondary" type="button" aria-label="セット数を1つ減らす">−</button>
@@ -123,19 +129,15 @@
         aria-modal="true"
         aria-labelledby="savedEntriesTitle"
     >
+        <button id="closeSavedEntriesButton" class="modal-close-button" type="button" aria-label="保存した記録を閉じる">×</button>
         <div class="saved-modal-header">
             <div>
                 <h2 id="savedEntriesTitle">これまでの記録</h2>
 
             </div>
-            <span id="savedCount" class="saved-count">0件</span>
         </div>
 
         <div id="savedList" class="saved-list" aria-live="polite"></div>
-
-        <div class="modal-actions single-action">
-            <button id="closeSavedEntriesButton" class="modal-button secondary" type="button">閉じる</button>
-        </div>
     </section>
 </div>
 
@@ -173,8 +175,9 @@
         <h2 id="themeTitle">テーマ変更</h2>
 
         <div class="theme-options">
-            <button id="themeMilkYarnButton" class="theme-option-button" type="button">Milk Yarn</button>
-            <button id="themePaperButton" class="theme-option-button" type="button">Paper</button>
+            <button id="themeCafeLatteButton" class="theme-option-button" type="button">Cafe Latte</button>
+            <button id="themeMilkButton" class="theme-option-button" type="button">Milk</button>
+            <button id="themeMochiDropButton" class="theme-option-button" type="button">Mochi Drop</button>
         </div>
     </section>
 </div>
@@ -213,6 +216,6 @@
     </section>
 </div>
 
-<script src="script.js?v=20260420-8"></script>
+<script src="script.js?v=20260420-12"></script>
 </body>
 </html>
