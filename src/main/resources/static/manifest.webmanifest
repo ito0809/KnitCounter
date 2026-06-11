@@ -1,0 +1,20 @@
+{
+  "name": "Knit Counter",
+  "short_name": "Knit",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf5ee",
+  "theme_color": "#faf5ee",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icon-512.png?v=20260420-5",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

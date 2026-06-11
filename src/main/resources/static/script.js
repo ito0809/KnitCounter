@@ -56,7 +56,7 @@ let count = Number.parseInt(localStorage.getItem(STORAGE_KEY) ?? "0", 10);
 let setCount = Number.parseInt(localStorage.getItem(SET_STORAGE_KEY) ?? "1", 10);
 let savedCounts = readSavedCounts();
 const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-let currentTheme = ["classic", "clean", "mochi"].includes(savedTheme) ? savedTheme : "classic";
+let currentTheme = ["classic", "clean"].includes(savedTheme) ? savedTheme : "classic";
 
 if (Number.isNaN(count) || count < 0) {
     count = 0;
@@ -193,7 +193,6 @@ function renderSavedCounts() {
 
 function renderTheme() {
     document.body.classList.toggle("theme-clean", currentTheme === "clean");
-    document.body.classList.toggle("theme-mochi", currentTheme === "mochi");
     themeToggleButton.textContent = "テーマ変更";
     themeCafeLatteButton.setAttribute("aria-pressed", String(currentTheme === "classic"));
     themeMilkButton.setAttribute("aria-pressed", String(currentTheme === "clean"));
@@ -407,11 +406,6 @@ function getAudioContext() {
 }
 
 function playPokoSound(pitch = "up") {
-    if (currentTheme === "mochi") {
-        playMochiSound(pitch);
-        return;
-    }
-
     const context = getAudioContext();
 
     if (!context) {
@@ -454,48 +448,6 @@ function playPokoSound(pitch = "up") {
     overtone.start(now);
     oscillator.stop(now + 0.2);
     overtone.stop(now + 0.2);
-}
-
-function playMochiSound(pitch = "up") {
-    const context = getAudioContext();
-
-    if (!context) {
-        return;
-    }
-
-    const now = context.currentTime;
-    const oscillator = context.createOscillator();
-    const wobble = context.createOscillator();
-    const gainNode = context.createGain();
-    const filter = context.createBiquadFilter();
-    const isLowerPitch = pitch === "down";
-
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(isLowerPitch ? 210 : 250, now);
-    oscillator.frequency.exponentialRampToValueAtTime(isLowerPitch ? 145 : 175, now + 0.18);
-
-    wobble.type = "triangle";
-    wobble.frequency.setValueAtTime(isLowerPitch ? 155 : 190, now);
-    wobble.frequency.exponentialRampToValueAtTime(isLowerPitch ? 118 : 136, now + 0.22);
-
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(760, now);
-    filter.Q.setValueAtTime(0.8, now);
-
-    gainNode.gain.setValueAtTime(0.0001, now);
-    gainNode.gain.exponentialRampToValueAtTime(0.13, now + 0.018);
-    gainNode.gain.exponentialRampToValueAtTime(0.06, now + 0.11);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
-
-    oscillator.connect(filter);
-    wobble.connect(filter);
-    filter.connect(gainNode);
-    gainNode.connect(context.destination);
-
-    oscillator.start(now);
-    wobble.start(now + 0.025);
-    oscillator.stop(now + 0.28);
-    wobble.stop(now + 0.25);
 }
 
 function playResetSound() {

@@ -40,19 +40,6 @@ body.theme-clean {
     --shadow: rgba(55, 55, 51, 0.12);
 }
 
-body.theme-mochi {
-    --white: #fffefd;
-    --beige-50: #EEF5F0;
-    --beige-100: #edf6e4;
-    --beige-200: #dceccd;
-    --beige-400: #8aa56f;
-    --beige-700: #46583b;
-    --sage-100: #f4faee;
-    --sage-200: #e2f0d7;
-    --sage-300: #c8ddb9;
-    --text: #3f4d38;
-    --shadow: rgba(97, 128, 76, 0.16);
-}
 
 .app-background {
     position: fixed;
@@ -72,14 +59,6 @@ body.theme-clean .app-background {
     opacity: 0.55;
 }
 
-body.theme-mochi .app-background {
-    background-image:
-        radial-gradient(circle at 22px 24px, rgba(255, 255, 255, 0.58) 0 13px, transparent 14px),
-        radial-gradient(circle at 122px 72px, rgba(196, 219, 181, 0.32) 0 8px, transparent 9px);
-    background-size: 176px 154px;
-    background-color: #EEF5F0;
-    opacity: 0.58;
-}
 
 .counter-app {
     position: relative;
@@ -113,21 +92,6 @@ body.theme-clean .counter-card {
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-body.theme-mochi .counter-card {
-    border-radius: 38px 34px 42px 36px / 36px 42px 34px 40px;
-    background:
-        radial-gradient(circle at 26% 14%, rgba(255, 255, 255, 0.99) 0 21%, transparent 22%),
-        radial-gradient(circle at 84% 88%, rgba(204, 226, 190, 0.34) 0 26%, transparent 27%),
-        linear-gradient(155deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 252, 242, 0.97) 56%, rgba(225, 241, 213, 0.95) 100%);
-    border-color: rgba(255, 255, 255, 0.72);
-    box-shadow:
-        0 18px 0 rgba(145, 176, 122, 0.24),
-        0 34px 54px rgba(97, 128, 76, 0.18),
-        0 12px 24px rgba(196, 219, 181, 0.28),
-        inset 0 5px 0 rgba(255, 255, 255, 0.98),
-        inset 0 -24px 34px rgba(157, 189, 133, 0.2),
-        inset 12px 0 26px rgba(255, 255, 255, 0.5);
-}
 
 .policy-card {
     width: min(100%, 420px);
@@ -280,16 +244,6 @@ body.theme-clean .count-display {
         inset 0 -3px 6px rgba(55, 55, 51, 0.06);
 }
 
-body.theme-mochi .count-display {
-    background:
-        radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.95) 0 18%, transparent 19%),
-        linear-gradient(165deg, #fbfff7 0%, #e8f4df 52%, #cfe3c1 100%);
-    box-shadow:
-        0 16px 28px rgba(97, 128, 76, 0.14),
-        0 6px 12px rgba(196, 219, 181, 0.28),
-        inset 0 4px 7px rgba(255, 255, 255, 0.78),
-        inset 0 -12px 18px rgba(97, 128, 76, 0.1);
-}
 
 body.theme-clean .count-display::before {
     background:
@@ -303,18 +257,6 @@ body.theme-clean .count-display::before {
         inset 0 -2px 4px rgba(55, 55, 51, 0.08);
 }
 
-body.theme-mochi .count-display::before {
-    background:
-        repeating-linear-gradient(
-            135deg,
-            rgba(216, 236, 203, 0.88) 0 12px,
-            rgba(255, 254, 253, 0.95) 12px 24px,
-            rgba(190, 214, 176, 0.78) 24px 36px
-        );
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.76),
-        inset 0 -2px 5px rgba(97, 128, 76, 0.09);
-}
 
 body.theme-clean .count-surface {
     background: #FAF8F5;
@@ -324,18 +266,6 @@ body.theme-clean .count-surface {
         inset 0 1px 0 rgba(255, 255, 255, 0.84);
 }
 
-body.theme-mochi .count-surface {
-    border-radius: 30px 24px 32px 26px / 26px 34px 24px 32px;
-    background:
-        radial-gradient(ellipse at 28% 14%, rgba(255, 255, 255, 0.98) 0 28%, transparent 29%),
-        radial-gradient(ellipse at 78% 92%, rgba(209, 231, 195, 0.2) 0 18%, transparent 22%),
-        linear-gradient(180deg, #fffefd 0%, #f7fcf2 64%, #e2f0d7 100%);
-    box-shadow:
-        0 16px 26px rgba(97, 128, 76, 0.12),
-        inset 0 -18px 26px rgba(97, 128, 76, 0.1),
-        inset 0 5px 0 rgba(255, 255, 255, 0.95),
-        inset 10px 0 22px rgba(255, 255, 255, 0.42);
-}
 
 .count-label {
     display: block;
@@ -359,10 +289,6 @@ body.theme-mochi .count-surface {
     animation: count-bump 0.22s ease;
 }
 
-body.theme-mochi .count-value.bump,
-body.theme-mochi .set-counter-value.bump {
-    animation: mochi-bump 0.44s cubic-bezier(0.18, 1.65, 0.32, 1);
-}
 
 .button-group {
     display: grid;
@@ -476,33 +402,8 @@ body.theme-clean .mini-count-button.secondary {
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-body.theme-mochi .count-button.primary,
-body.theme-mochi .count-button.secondary,
-body.theme-mochi .mini-count-button.primary,
-body.theme-mochi .mini-count-button.secondary {
-    background:
-        radial-gradient(ellipse at 18% 12%, rgba(255, 255, 255, 0.99) 0 18%, rgba(255, 255, 255, 0.42) 26%, transparent 34%),
-        radial-gradient(ellipse at 72% 84%, rgba(236, 247, 228, 0.32) 0 13%, transparent 17%),
-        linear-gradient(180deg, #fefffb 0%, #e0f0d4 58%, #bdd7ac 100%);
-    color: #46583b;
-    border: 1px solid rgba(255, 255, 255, 0.86);
-    box-shadow:
-        0 17px 0 rgba(145, 176, 122, 0.42),
-        0 24px 28px rgba(97, 128, 76, 0.19),
-        0 7px 14px rgba(196, 219, 181, 0.34),
-        inset 0 5px 0 rgba(255, 255, 255, 0.98),
-        inset 0 -14px 22px rgba(97, 128, 76, 0.14),
-        inset 10px 0 18px rgba(255, 255, 255, 0.34);
-    transition: transform 0.22s cubic-bezier(0.16, 1.8, 0.3, 1), box-shadow 0.2s ease, background-color 0.18s ease;
-}
 
-body.theme-mochi .count-button {
-    border-radius: 34px 28px 36px 30px / 30px 38px 28px 36px;
-}
 
-body.theme-mochi .mini-count-button {
-    border-radius: 48% 52% 46% 54% / 54% 46% 52% 48%;
-}
 
 body.theme-clean .saved-entries-button,
 body.theme-clean .save-button,
@@ -516,21 +417,6 @@ body.theme-clean .theme-option-button {
         inset 0 1px 0 rgba(255, 255, 255, 0.76);
 }
 
-body.theme-mochi .saved-entries-button,
-body.theme-mochi .save-button,
-body.theme-mochi .modal-button.secondary,
-body.theme-mochi .menu-item-button,
-body.theme-mochi .theme-option-button {
-    background:
-        radial-gradient(ellipse at 30% 18%, rgba(255, 255, 255, 0.99) 0 22%, transparent 23%),
-        linear-gradient(180deg, #fffefd 0%, #ebf6e3 62%, #d0e5c2 100%);
-    color: #46583b;
-    box-shadow:
-        0 10px 0 rgba(145, 176, 122, 0.32),
-        0 16px 24px rgba(97, 128, 76, 0.16),
-        inset 0 4px 0 rgba(255, 255, 255, 0.98),
-        inset 0 -10px 16px rgba(97, 128, 76, 0.11);
-}
 
 body.theme-clean .save-button {
     box-shadow:
@@ -539,18 +425,6 @@ body.theme-clean .save-button {
         inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
-body.theme-mochi .save-button {
-    border-radius: 24px 30px 26px 32px / 30px 24px 32px 26px;
-    background:
-        radial-gradient(ellipse at 24% 20%, rgba(255, 255, 255, 1) 0 16%, rgba(255, 255, 255, 0.42) 25%, transparent 34%),
-        linear-gradient(180deg, #fefffb 0%, #e6f3dc 62%, #c7dfb6 100%);
-    box-shadow:
-        0 12px 0 rgba(145, 176, 122, 0.36),
-        0 22px 30px rgba(97, 128, 76, 0.19),
-        0 6px 14px rgba(196, 219, 181, 0.34),
-        inset 0 5px 0 rgba(255, 255, 255, 1),
-        inset 0 -12px 20px rgba(97, 128, 76, 0.12);
-}
 
 body.theme-clean .menu-modal-card .menu-item-button,
 body.theme-clean .menu-modal-card .modal-button.secondary {
@@ -567,19 +441,6 @@ body.theme-clean .saved-delete-button {
     color: #7A6657;
 }
 
-body.theme-mochi .card-reset-button,
-body.theme-mochi .modal-close-button,
-body.theme-mochi .saved-delete-button {
-    background:
-        radial-gradient(circle at 32% 22%, rgba(255, 255, 255, 0.98) 0 20%, transparent 21%),
-        linear-gradient(180deg, #fbfff7 0%, #c7dfb6 100%);
-    color: #46583b;
-    box-shadow:
-        0 7px 0 rgba(145, 176, 122, 0.34),
-        0 12px 18px rgba(97, 128, 76, 0.15),
-        inset 0 4px 0 rgba(255, 255, 255, 0.9),
-        inset 0 -8px 14px rgba(97, 128, 76, 0.12);
-}
 
 .set-counter-card {
     position: relative;
@@ -680,17 +541,6 @@ body.theme-clean .set-counter-card {
         0 8px 18px rgba(55, 55, 51, 0.055);
 }
 
-body.theme-mochi .set-counter-card {
-    border-radius: 26px 22px 28px 24px / 22px 28px 24px 26px;
-    background:
-        radial-gradient(ellipse at 18% 12%, rgba(255, 255, 255, 0.96) 0 18%, rgba(255, 255, 255, 0.38) 26%, transparent 34%),
-        linear-gradient(180deg, #fffefd 0%, #eff8e8 60%, #d4e8c5 100%);
-    box-shadow:
-        0 12px 0 rgba(157, 189, 133, 0.24),
-        0 18px 24px rgba(97, 128, 76, 0.09),
-        inset 0 4px 0 rgba(255, 255, 255, 0.92),
-        inset 0 -14px 22px rgba(157, 189, 133, 0.22);
-}
 
 body.theme-clean .set-counter-value {
     color: #7A6657;
@@ -700,19 +550,12 @@ body.theme-clean .set-counter-suffix {
     color: #7A6657;
 }
 
-body.theme-mochi .set-counter-value,
-body.theme-mochi .set-counter-suffix {
-    color: #46583b;
-}
 
 body.theme-clean .set-reset-button {
     background: linear-gradient(180deg, #eeeeea 0%, #d9d9d3 100%);
     color: #7A6657;
 }
 
-body.theme-mochi .set-reset-button {
-    background: linear-gradient(180deg, #fbfff7 0%, #c7dfb6 100%);
-}
 
 .count-surface > .card-reset-button {
     position: absolute;
@@ -785,45 +628,9 @@ body.theme-mochi .set-reset-button {
     width: 88%;
 }
 
-body.theme-mochi .saved-entries-icon {
-    position: relative;
-    display: block;
-    width: 18px;
-    height: 30px;
-    transform: translateY(2px);
-}
 
-body.theme-mochi .saved-entries-icon span {
-    display: none;
-}
 
-body.theme-mochi .saved-entries-icon::before {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 3px;
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    background: #789360;
-    box-shadow:
-        0 10px 0 #789360,
-        0 20px 0 #789360;
-}
 
-body.theme-mochi .saved-entries-icon::after {
-    content: "";
-    position: absolute;
-    left: 7px;
-    top: 5px;
-    width: 2px;
-    height: 2px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.58);
-    box-shadow:
-        0 10px 0 rgba(255, 255, 255, 0.52),
-        0 20px 0 rgba(255, 255, 255, 0.46);
-}
 
 .count-button:hover,
 .mini-count-button:hover,
@@ -851,23 +658,6 @@ body.theme-mochi .saved-entries-icon::after {
     transform: translateY(0);
 }
 
-body.theme-mochi .count-button:active,
-body.theme-mochi .mini-count-button:active,
-body.theme-mochi .card-reset-button:active,
-body.theme-mochi .save-button:active,
-body.theme-mochi .modal-button:active,
-body.theme-mochi .saved-entries-button:active,
-body.theme-mochi .saved-delete-button:active,
-body.theme-mochi .menu-item-button:active,
-body.theme-mochi .theme-option-button:active,
-body.theme-mochi .modal-close-button:active {
-    transform: translateY(9px) scale(1.09, 0.82);
-    box-shadow:
-        0 3px 0 rgba(145, 176, 122, 0.24),
-        0 7px 12px rgba(97, 128, 76, 0.1),
-        inset 0 13px 20px rgba(97, 128, 76, 0.13),
-        inset 0 3px 0 rgba(255, 255, 255, 0.72);
-}
 
 .count-button:focus-visible,
 .mini-count-button:focus-visible,
@@ -1049,17 +839,6 @@ body.theme-mochi .modal-close-button:active {
         inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
-body.theme-mochi .saved-item {
-    border-radius: 24px 20px 26px 22px / 22px 28px 20px 26px;
-    background:
-        radial-gradient(ellipse at 18% 12%, rgba(255, 255, 255, 0.96) 0 18%, rgba(255, 255, 255, 0.38) 26%, transparent 34%),
-        linear-gradient(180deg, #fffefd 0%, #eff8e8 60%, #d4e8c5 100%);
-    box-shadow:
-        0 9px 0 rgba(145, 176, 122, 0.22),
-        0 14px 22px rgba(97, 128, 76, 0.12),
-        inset 0 4px 0 rgba(255, 255, 255, 0.94),
-        inset 0 -10px 16px rgba(97, 128, 76, 0.08);
-}
 
 .saved-item-button {
     display: grid;
@@ -1118,9 +897,6 @@ body.theme-mochi .saved-item {
     stroke-linejoin: round;
 }
 
-body.theme-mochi .saved-delete-icon {
-    transform: translateY(1px);
-}
 
 .modal[hidden] {
     display: none;
@@ -1142,10 +918,6 @@ body.theme-mochi .saved-delete-icon {
     backdrop-filter: blur(3px);
 }
 
-body.theme-mochi .modal-backdrop {
-    background: rgba(70, 88, 59, 0.24);
-    backdrop-filter: blur(5px);
-}
 
 .modal-card {
     position: relative;
@@ -1159,33 +931,8 @@ body.theme-mochi .modal-backdrop {
         inset 0 1px 0 rgba(255, 255, 255, 0.84);
 }
 
-body.theme-mochi .modal-card {
-    border-radius: 34px 30px 38px 32px / 32px 38px 30px 36px;
-    background:
-        radial-gradient(ellipse at 24% 10%, rgba(255, 255, 255, 0.98) 0 20%, transparent 21%),
-        radial-gradient(ellipse at 88% 92%, rgba(204, 226, 190, 0.34) 0 28%, transparent 29%),
-        linear-gradient(160deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 252, 242, 0.98) 58%, rgba(226, 240, 215, 0.96) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.74);
-    box-shadow:
-        0 22px 0 rgba(145, 176, 122, 0.2),
-        0 32px 54px rgba(97, 128, 76, 0.18),
-        inset 0 5px 0 rgba(255, 255, 255, 0.95),
-        inset 0 -18px 28px rgba(157, 189, 133, 0.18);
-}
 
-body.theme-mochi .menu-modal-card {
-    background:
-        radial-gradient(ellipse at 16% 8%, rgba(255, 255, 255, 0.98) 0 16%, rgba(255, 255, 255, 0.4) 25%, transparent 34%),
-        radial-gradient(ellipse at 88% 92%, rgba(204, 226, 190, 0.34) 0 28%, transparent 29%),
-        linear-gradient(160deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 252, 242, 0.98) 58%, rgba(226, 240, 215, 0.96) 100%);
-}
 
-body.theme-mochi #saveModal .modal-card {
-    background:
-        radial-gradient(ellipse at 16% 8%, rgba(255, 255, 255, 0.98) 0 16%, rgba(255, 255, 255, 0.4) 25%, transparent 34%),
-        radial-gradient(ellipse at 88% 92%, rgba(204, 226, 190, 0.34) 0 28%, transparent 29%),
-        linear-gradient(160deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 252, 242, 0.98) 58%, rgba(226, 240, 215, 0.96) 100%);
-}
 
 .modal-card h2 {
     margin: 0;
@@ -1193,10 +940,6 @@ body.theme-mochi #saveModal .modal-card {
     color: var(--beige-700);
 }
 
-body.theme-mochi .modal-card h2 {
-    color: #46583b;
-    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.78);
-}
 
 .modal-description {
     margin: 10px 0 18px;
@@ -1204,9 +947,6 @@ body.theme-mochi .modal-card h2 {
     line-height: 1.5;
 }
 
-body.theme-mochi .modal-description {
-    color: rgba(63, 77, 56, 0.74);
-}
 
 .modal-count-box {
     display: grid;
@@ -1219,17 +959,6 @@ body.theme-mochi .modal-description {
         inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
-body.theme-mochi .modal-count-box {
-    border-radius: 24px 20px 26px 22px / 22px 28px 20px 26px;
-    background:
-        radial-gradient(ellipse at 30% 18%, rgba(255, 255, 255, 0.98) 0 22%, transparent 23%),
-        linear-gradient(180deg, #fefffb 0%, #ecf7e5 60%, #d4e8c5 100%);
-    box-shadow:
-        0 9px 0 rgba(145, 176, 122, 0.22),
-        0 14px 22px rgba(97, 128, 76, 0.12),
-        inset 0 4px 0 rgba(255, 255, 255, 0.94),
-        inset 0 -10px 16px rgba(97, 128, 76, 0.08);
-}
 
 .modal-count-grid {
     display: grid;
@@ -1243,9 +972,6 @@ body.theme-mochi .modal-count-box {
     color: var(--beige-400);
 }
 
-body.theme-mochi .modal-count-label {
-    color: #789360;
-}
 
 .modal-count-value {
     font-size: 2.6rem;
@@ -1254,11 +980,6 @@ body.theme-mochi .modal-count-label {
     color: var(--beige-700);
 }
 
-body.theme-mochi .modal-count-value,
-body.theme-mochi .modal-set-count-value {
-    color: #46583b;
-    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.72);
-}
 
 .modal-set-count-value {
     color: #8b6a4b;
@@ -1271,9 +992,6 @@ body.theme-mochi .modal-set-count-value {
     color: var(--beige-700);
 }
 
-body.theme-mochi .modal-label {
-    color: #46583b;
-}
 
 .modal-input {
     width: 100%;
@@ -1286,21 +1004,7 @@ body.theme-mochi .modal-label {
     box-shadow: inset 0 1px 2px rgba(109, 84, 64, 0.05);
 }
 
-body.theme-mochi .modal-input {
-    border-color: rgba(145, 176, 122, 0.36);
-    border-radius: 20px;
-    background:
-        linear-gradient(180deg, #fffefd 0%, #f8fcf4 100%);
-    color: #3f4d38;
-    box-shadow:
-        inset 0 3px 7px rgba(97, 128, 76, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.92),
-        0 8px 16px rgba(97, 128, 76, 0.08);
-}
 
-body.theme-mochi .modal-input::placeholder {
-    color: rgba(70, 88, 59, 0.42);
-}
 
 .modal-error {
     margin: 10px 0 0;
@@ -1350,18 +1054,6 @@ body.theme-clean .theme-option-button[aria-pressed="true"] {
         inset 0 1px 0 rgba(255, 255, 255, 0.58);
 }
 
-body.theme-mochi .modal-button.primary,
-body.theme-mochi .theme-option-button[aria-pressed="true"] {
-    background:
-        radial-gradient(ellipse at 28% 20%, rgba(255, 255, 255, 0.99) 0 21%, transparent 22%),
-        linear-gradient(180deg, #f6fff0 0%, #dceecf 58%, #b8d4a5 100%);
-    color: #46583b;
-    box-shadow:
-        0 10px 0 rgba(145, 176, 122, 0.36),
-        0 18px 26px rgba(97, 128, 76, 0.18),
-        inset 0 5px 0 rgba(255, 255, 255, 0.94),
-        inset 0 -12px 18px rgba(97, 128, 76, 0.12);
-}
 
 body.theme-clean .modal-button.secondary {
     background: linear-gradient(180deg, #ffffff 0%, #eeeeea 100%);
@@ -1385,27 +1077,6 @@ body.theme-clean .modal-button.secondary {
     }
 }
 
-@keyframes mochi-bump {
-    0% {
-        transform: scale(1, 1);
-    }
-
-    24% {
-        transform: scale(1.16, 0.78);
-    }
-
-    54% {
-        transform: scale(0.88, 1.2);
-    }
-
-    76% {
-        transform: scale(1.05, 0.94);
-    }
-
-    100% {
-        transform: scale(1, 1);
-    }
-}
 
 @media (max-width: 480px) {
     .counter-card {
