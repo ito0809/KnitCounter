@@ -449,6 +449,11 @@ function playPokoSound(pitch = "up") {
     oscillator.stop(now + 0.2);
     overtone.stop(now + 0.2);
 }
+function playHaptic() {
+    if (window.webkit?.messageHandlers?.haptic) {
+        window.webkit.messageHandlers.haptic.postMessage("tap");
+    }
+}
 
 function playResetSound() {
     const context = getAudioContext();
@@ -542,6 +547,7 @@ function playSaveClickSound() {
 
 increaseButton.addEventListener("click", () => {
     count += 1;
+    playHaptic();
     playPokoSound("up");
     renderCount();
 });
@@ -552,12 +558,14 @@ decreaseButton.addEventListener("click", () => {
     }
 
     count -= 1;
+    playHaptic();
     playPokoSound("down");
     renderCount();
 });
 
 increaseSetButton.addEventListener("click", () => {
     setCount += 1;
+    playHaptic();
     playPokoSound("up");
     renderSetCount();
 });
@@ -568,6 +576,7 @@ decreaseSetButton.addEventListener("click", () => {
     }
 
     setCount -= 1;
+    playHaptic();
     playPokoSound("down");
     renderSetCount();
 });
